@@ -68,3 +68,6 @@ dependencies: [
     .package(url: "https://github.com/swift-man/AppVersionService.git", .from: "0.5.0")
 ]
 ```
+
+## Example Presentation Layer
+[LaunchingView](https://github.com/swift-man/LaunchingView) - SwiftUI
