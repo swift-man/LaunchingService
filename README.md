@@ -14,7 +14,7 @@
 ## API Call
 ```swift
 let appVersionService = AppVersionFetchService(keyStore: AppVersionServiceKeyStore())
-try await appVersionInteractor.fetchAppVersion()
+let result = try await appVersionInteractor.fetchAppVersion()
 ```
 
 ### API Response
