@@ -1,6 +1,6 @@
 # AppVersionService
 
-## FirebaseRemoteConfig Async/await wrapper
+## [FirebaseRemoteConfig](https://github.com/firebase/firebase-ios-sdk) Async/await wrapper.
 
 ![Badge](https://img.shields.io/badge/swift-white.svg?style=flat-square&logo=Swift)
 ![Badge](https://img.shields.io/badge/SwiftUI-001b87.svg?style=flat-square&logo=Swift&logoColor=black)
@@ -13,6 +13,7 @@
 
 ## API Call
 ```swift
+let appVersionService = AppVersionFetchService(keyStore: AppVersionServiceKeyStore())
 try await appVersionInteractor.fetchAppVersion()
 ```
 
@@ -36,6 +37,22 @@ public enum AppVersionServiceError: Error {
   case unknown
 }
 ```
+
+## Default Keys
+```swift
+appStoreURLKey = "appStoreURLString"
+forceAppVersionKey = "iosForceAppVersion"
+forceUpdateMessageKey = "forceUpdateMessage"
+optionalUpdateMessageKey = "optionalUpdateMessage"
+optionalUpdateVersionKey = "iosOptionalUpdateVersion"
+```
+
+## Your Custom Keys
+```swift
+let keyStore = AppVersionServiceKeyStore(appStoreURLKey: #YourCustomKey#, ...)
+let service = AppVersionFetchService(keyStore: keyStore))
+```
+
 
 ## Installation
 ### Swift Package Manager
