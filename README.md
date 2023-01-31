@@ -44,10 +44,10 @@ public enum AppVersionServiceError: Error {
 
 ```swift
 appStoreURLKey = "appStoreURLString"
-forceAppVersionKey = "iosForceAppVersion"
-forceUpdateMessageKey = "forceUpdateMessage"
-optionalUpdateMessageKey = "optionalUpdateMessage"
-optionalUpdateVersionKey = "iosOptionalUpdateVersion"
+forceAppVersionKey = "iosForceAppVersion" // (Optional Value)
+forceUpdateMessageKey = "forceUpdateMessage" // (Optional Key, Value)
+optionalUpdateMessageKey = "optionalUpdateMessage" // (Optional Key, Value)
+optionalUpdateVersionKey = "iosOptionalUpdateVersion" // (Optional Value)
 ```
 
 ### Your Custom Keys
