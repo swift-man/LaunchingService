@@ -12,6 +12,17 @@
 ## Google Firebase
 ### [FirebaseRemoteConfig](https://github.com/firebase/firebase-ios-sdk) Async/await wrapper.
 
+## Feature
+* [x] Force Version Checked Update
+* [x] Optional Version Checked Update
+* [ ] BlackList Version
+* [ ] Notice
+  * [ ] startDate ~ endDate
+  * [ ] message
+  * [ ] optional
+  * [ ] button URL Link
+
+
 ## API Call
 ```swift
 let appVersionService = AppVersionFetchService(keyStore: AppVersionServiceKeyStore())
