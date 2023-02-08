@@ -8,23 +8,6 @@
 import Foundation
 import FirebaseRemoteConfig
 
-struct Launching: Sendable {
-  let forceUpdate: ForceUpdate
-  let optionalUpdate: OptionalUpdate
-  let blackListVersions: [String]
-  let appStoreURL: URL
-}
-
-struct ForceUpdate: Sendable {
-  let version: String
-  let message: String
-}
-
-struct OptionalUpdate: Sendable {
-  let version: String
-  let message: String
-}
-
 final class RemoteConfigParser: Sendable {
   let keyStore: LaunchingServiceKeyStore
   
@@ -35,10 +18,10 @@ final class RemoteConfigParser: Sendable {
   func parse() throws -> Launching {
     let launching: Launching
     do {
-      launching = Launching(forceUpdate: ForceUpdate(version: try parseForceUpdateAppVersion(),
-                                                     message: forceUpdateMessage),
-                            optionalUpdate: OptionalUpdate(version: try parseOptionalUpdateVersion(),
-                                                           message: optionalUpdateMessage),
+      launching = Launching(forceUpdate: UpdateInfo(version: try parseForceUpdateAppVersion(),
+                                                    message: forceUpdateMessage),
+                            optionalUpdate: UpdateInfo(version: try parseOptionalUpdateVersion(),
+                                                       message: optionalUpdateMessage),
                             blackListVersions: parseBlackListVersions,
                             appStoreURL: try parseAppStoreURL())
     } catch {
