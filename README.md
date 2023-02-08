@@ -15,7 +15,7 @@
 ## Feature
 * [x] Force Version Checked Update
 * [x] Optional Version Checked Update
-* [ ] BlackList Version
+* [x] BlackList Version
 * [ ] Notice
   * [ ] startDate ~ endDate
   * [ ] message
@@ -25,14 +25,14 @@
 
 ## API Call
 ```swift
-let appVersionService = AppVersionFetchService(keyStore: AppVersionServiceKeyStore())
-let result = try await appVersionInteractor.fetchAppVersion()
+let service = LaunchingService(keyStore: LaunchingServiceKeyStore())
+let appUpdateState = try await service.fetchLaunchingConfig()
 ```
 
 ### API Response
 ```swift
-public enum ResultAppVersion: Equatable {
-  case success
+public enum AppUpdateStatus: Equatable, Sendable {
+  case valid
   case forcedUpdateRequired(message: String, appstoreURL: URL)
   case optionalUpdateRequired(message: String, appstoreURL: URL)
 }
@@ -59,12 +59,13 @@ forceAppVersionKey = "iosForceAppVersion" // (Optional Value)
 forceUpdateMessageKey = "forceUpdateMessage" // (Optional Key, Value)
 optionalUpdateMessageKey = "optionalUpdateMessage" // (Optional Key, Value)
 optionalUpdateVersionKey = "iosOptionalUpdateVersion" // (Optional Value)
+blackListVersionsKey = "blackListVersions" // (Optional Key, Value)
 ```
 
 ### Your Custom Keys
 ```swift
-let keyStore = AppVersionServiceKeyStore(appStoreURLKey: #YourCustomKey#, ...)
-let service = AppVersionFetchService(keyStore: keyStore))
+let keyStore = LaunchingServiceKeyStore(appStoreURLKey: #YourCustomKey#, ...)
+let service = LaunchingService(keyStore: keyStore))
 ```
 
 
@@ -77,7 +78,7 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-man/AppVersionService.git", .from: "0.5.0")
+    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.6.0")
 ]
 ```
 
