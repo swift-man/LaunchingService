@@ -1,8 +1,8 @@
-# AppVersionService
+# LaunchingService
 
 ![Badge](https://img.shields.io/badge/swift-white.svg?style=flat-square&logo=Swift)
 ![Badge](https://img.shields.io/badge/SwiftUI-001b87.svg?style=flat-square&logo=Swift&logoColor=black)
-![Badge - Version](https://img.shields.io/badge/Version-0.5.0-1177AA?style=flat-square)
+![Badge - Version](https://img.shields.io/badge/Version-0.6.1-1177AA?style=flat-square)
 ![Badge - Swift Package Manager](https://img.shields.io/badge/SPM-compatible-orange?style=flat-square)
 ![Badge - Platform](https://img.shields.io/badge/platform-mac_12|ios_15-yellow?style=flat-square)
 ![Badge - License](https://img.shields.io/badge/license-MIT-black?style=flat-square)  
@@ -40,26 +40,26 @@ public enum AppUpdateStatus: Equatable, Sendable {
 
 ### API Error
 ```swift
-public enum AppVersionServiceError: Error {
-  case invalidAppStoreURLString
-  case notFoundAppStoreURLString
-  case notFoundForceAppVersionKey
-  case notFoundOptionalUpdateVersionKey
-  case notFoundReleaseVersionNumber
+public enum LaunchingServiceError: Error {
+  case invalidAppStoreURLValue
+  case notFoundAppStoreURLKey
+  case notFoundForceUpdateAppVersionKey
+  case notFoundOptionalUpdateAppVersionKey
+  case invalidMainBundleReleaseVersionNumber
   case unknown
 }
 ```
 
 ## Default Keys
-![Image](https://drive.google.com/uc?export=view&id=1LJdPX5TecGYyOypU5sRXAe6-1O17aYAg)  
+![Image](https://drive.google.com/uc?export=view&id=1f2dRMrS9SuRiVWXolqrGLXiCvrpgcVQd)  
 
 ```swift
-appStoreURLKey = "appStoreURLString"
-forceAppVersionKey = "iosForceAppVersion" // (Optional Value)
-forceUpdateMessageKey = "forceUpdateMessage" // (Optional Key, Value)
-optionalUpdateMessageKey = "optionalUpdateMessage" // (Optional Key, Value)
-optionalUpdateVersionKey = "iosOptionalUpdateVersion" // (Optional Value)
-blackListVersionsKey = "blackListVersions" // (Optional Key, Value)
+"appStoreURLKey"
+"forceUpdateAppVersionKey" // (Optional Value)
+"forceUpdateMessageKey" // (Optional Key, Value)
+"optionalUpdateAppVersionKey" // (Optional Key, Value)
+"optionalUpdateMessageKey" // (Optional Value)
+"blackListVersionsKey" // (Optional Key, Value)
 ```
 
 ### Your Custom Keys

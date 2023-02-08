@@ -20,7 +20,7 @@ public class MainBundle {
     guard
       let releaseVersion = releaseVersionNumber, !releaseVersion.isEmpty
     else {
-      throw LaunchingServiceError.notFoundReleaseVersionNumber
+      throw LaunchingServiceError.invalidMainBundleReleaseVersionNumber
     }
     
     return releaseVersion

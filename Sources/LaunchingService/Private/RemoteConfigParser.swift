@@ -5,7 +5,6 @@
 //  Created by SwiftMan on 2023/02/06.
 //
 
-import Foundation
 import FirebaseRemoteConfig
 
 final class RemoteConfigParser: Sendable {
@@ -18,9 +17,9 @@ final class RemoteConfigParser: Sendable {
   func parse() throws -> Launching {
     let launching: Launching
     do {
-      launching = Launching(forceUpdate: UpdateInfo(version: try parseForceUpdateAppVersion(),
+      launching = Launching(forceUpdate: UpdateInfo(version: try parseForceUpdateAppVersionKey(),
                                                     message: forceUpdateMessage),
-                            optionalUpdate: UpdateInfo(version: try parseOptionalUpdateVersion(),
+                            optionalUpdate: UpdateInfo(version: try parseOptionalUpdateAppVersion(),
                                                        message: optionalUpdateMessage),
                             blackListVersions: parseBlackListVersions,
                             appStoreURL: try parseAppStoreURL())
@@ -38,37 +37,37 @@ final class RemoteConfigParser: Sendable {
         .configValue(forKey: keyStore.appStoreURLKey)
         .stringValue
     else {
-      throw LaunchingServiceError.notFoundAppStoreURLString
+      throw LaunchingServiceError.notFoundAppStoreURLKey
     }
     
     guard let appStoreURL = URL(string: appStoreURLString) else {
-      throw LaunchingServiceError.invalidAppStoreURLString
+      throw LaunchingServiceError.invalidAppStoreURLValue
     }
     
     return appStoreURL
   }
   
-  private func parseForceUpdateAppVersion() throws -> String {
+  private func parseForceUpdateAppVersionKey() throws -> String {
     guard
       let forceUpdateAppVersion = RemoteConfig
         .remoteConfig()
-        .configValue(forKey: keyStore.forceAppVersionKey)
+        .configValue(forKey: keyStore.forceUpdateAppVersionKey)
         .stringValue
     else {
-      throw LaunchingServiceError.notFoundForceAppVersionKey
+      throw LaunchingServiceError.notFoundForceUpdateAppVersionKey
     }
 
     return forceUpdateAppVersion
   }
   
-  private func parseOptionalUpdateVersion() throws -> String {
+  private func parseOptionalUpdateAppVersion() throws -> String {
     guard
       let optionalUpdateVersion = RemoteConfig
         .remoteConfig()
-        .configValue(forKey: keyStore.optionalUpdateVersionKey)
+        .configValue(forKey: keyStore.optionalUpdateAppVersionKey)
         .stringValue
     else {
-      throw LaunchingServiceError.notFoundOptionalUpdateVersionKey
+      throw LaunchingServiceError.notFoundOptionalUpdateAppVersionKey
     }
 
     return optionalUpdateVersion

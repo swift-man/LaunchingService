@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import FirebaseRemoteConfig
-import Firebase
 
 final class OptionalUpdateVersionChecker: Sendable {
   func compare(releaseVersionNumber: String,
