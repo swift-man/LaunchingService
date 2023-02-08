@@ -8,11 +8,21 @@
 import Foundation
 
 public class MainBundle {
-  public static var releaseVersionNumber: String? {
+  public var releaseVersionNumber: String? {
     return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
   }
   
-  public static var buildVersionNumber: String? {
+  public var buildVersionNumber: String? {
     return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+  }
+  
+  func releaseVersion() throws -> String {
+    guard
+      let releaseVersion = releaseVersionNumber, !releaseVersion.isEmpty
+    else {
+      throw LaunchingServiceError.notFoundReleaseVersionNumber
+    }
+    
+    return releaseVersion
   }
 }

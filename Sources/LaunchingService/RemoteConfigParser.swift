@@ -26,9 +26,9 @@ struct OptionalUpdate: Sendable {
 }
 
 final class RemoteConfigParser: Sendable {
-  let keyStore: AppVersionServiceKeyStore
+  let keyStore: LaunchingServiceKeyStore
   
-  init(keyStore: AppVersionServiceKeyStore) {
+  init(keyStore: LaunchingServiceKeyStore) {
     self.keyStore = keyStore
   }
   
@@ -56,11 +56,11 @@ final class RemoteConfigParser: Sendable {
         .configValue(forKey: keyStore.appStoreURLKey)
         .stringValue
     else {
-      throw AppVersionServiceError.notFoundAppStoreURLString
+      throw LaunchingServiceError.notFoundAppStoreURLString
     }
     
     guard let appStoreURL = URL(string: appStoreURLString) else {
-      throw AppVersionServiceError.invalidAppStoreURLString
+      throw LaunchingServiceError.invalidAppStoreURLString
     }
     
     return appStoreURL
@@ -73,7 +73,7 @@ final class RemoteConfigParser: Sendable {
         .configValue(forKey: keyStore.forceAppVersionKey)
         .stringValue
     else {
-      throw AppVersionServiceError.notFoundForceAppVersionKey
+      throw LaunchingServiceError.notFoundForceAppVersionKey
     }
 
     return forceUpdateAppVersion
@@ -86,7 +86,7 @@ final class RemoteConfigParser: Sendable {
         .configValue(forKey: keyStore.optionalUpdateVersionKey)
         .stringValue
     else {
-      throw AppVersionServiceError.notFoundOptionalUpdateVersionKey
+      throw LaunchingServiceError.notFoundOptionalUpdateVersionKey
     }
 
     return optionalUpdateVersion

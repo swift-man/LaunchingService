@@ -1,5 +1,5 @@
 //
-//  AppVersionServiceError.swift
+//  LaunchingServiceError.swift
 //  
 //
 //  Created by SwiftMan on 2023/01/31.
@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Enums
-public enum AppVersionServiceError: Equatable, LocalizedError, Sendable {
+public enum LaunchingServiceError: Equatable, LocalizedError, Sendable {
   case invalidAppStoreURLString
   case notFoundAppStoreURLString
   case notFoundForceAppVersionKey

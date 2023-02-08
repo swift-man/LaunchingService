@@ -12,16 +12,16 @@ import Firebase
 public final class LaunchingService: Sendable {
   let remoteConfigParser: RemoteConfigParser
   
-  public init(keyStore: AppVersionServiceKeyStore) {
+  public init(keyStore: LaunchingServiceKeyStore) {
     self.remoteConfigParser = RemoteConfigParser(keyStore: keyStore)
   }
   
-  public func fetchLaunchingConfig() async throws -> ResultAppVersion {
-    return try await withCheckedThrowingContinuation({ [weak self] (continuation: CheckedContinuation<ResultAppVersion, Error>) in
+  public func fetchLaunchingConfig() async throws -> AppUpdateStatus {
+    return try await withCheckedThrowingContinuation({ [weak self] (continuation: CheckedContinuation<AppUpdateStatus, Error>) in
       RemoteConfig.remoteConfig()
         .fetch(withExpirationDuration: 0) { [weak self] (status, error) in
           guard let self else {
-            continuation.resume(throwing: AppVersionServiceError.unknown)
+            continuation.resume(throwing: LaunchingServiceError.unknown)
             return
           }
           if let error {
@@ -33,17 +33,7 @@ public final class LaunchingService: Sendable {
           
           do {
             let launching = try self.remoteConfigParser.parse()
-            let releaseVersionNumber = try AppVersionService().releaseVersionNumber()
-            
-            let appVersionChecker = AppVersionChecker()
-            var updateState = appVersionChecker.compare(releaseVersionNumber: releaseVersionNumber,
-                                                        launching: launching)
-            
-            if updateState == .success {
-              let blackListVersionChecker = BlackListVersionChecker()
-              updateState = blackListVersionChecker.compare(releaseVersionNumber: releaseVersionNumber,
-                                                            launching: launching)
-            }
+            let updateState = try self.compare(launching: launching)
             
             continuation.resume(returning: updateState)
           } catch {
@@ -51,5 +41,25 @@ public final class LaunchingService: Sendable {
           }
         }
     })
+  }
+  
+  func compare(launching: Launching) throws -> AppUpdateStatus {
+    do {
+      let releaseVersionNumber = try MainBundle().releaseVersion()
+      
+      let updateVersionChecker = UpdateVersionChecker()
+      var updateState = updateVersionChecker.compare(releaseVersionNumber: releaseVersionNumber,
+                                                  launching: launching)
+      
+      if updateState == .valid {
+        let blackListVersionChecker = BlackListVersionChecker()
+        updateState = blackListVersionChecker.compare(releaseVersionNumber: releaseVersionNumber,
+                                                      launching: launching)
+      }
+      
+      return updateState
+    } catch {
+      throw error
+    }
   }
 }

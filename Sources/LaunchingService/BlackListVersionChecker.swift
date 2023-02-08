@@ -9,13 +9,13 @@ import Foundation
 
 final class BlackListVersionChecker: Sendable {
   func compare(releaseVersionNumber: String,
-               launching: Launching) -> ResultAppVersion {
+               launching: Launching) -> AppUpdateStatus {
     
     if launching.blackListVersions.contains(releaseVersionNumber) {
       return .forcedUpdateRequired(message: launching.forceUpdate.message,
                                    appstoreURL: launching.appStoreURL)
     }
     
-    return .success
+    return .valid
   }
 }

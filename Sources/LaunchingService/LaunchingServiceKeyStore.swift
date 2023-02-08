@@ -1,5 +1,5 @@
 //
-//  AppVersionServiceKeyStore.swift
+//  LaunchingServiceKeyStore.swift
 //  
 //
 //  Created by SwiftMan on 2023/01/31.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AppVersionServiceKeyStore: Sendable {
+public struct LaunchingServiceKeyStore: Sendable {
   let appStoreURLKey: String
   let forceAppVersionKey: String
   let forceUpdateMessageKey: String

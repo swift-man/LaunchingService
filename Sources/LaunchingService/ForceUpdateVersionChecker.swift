@@ -9,19 +9,17 @@ import Foundation
 
 final class ForceUpdateVersionChecker: Sendable {
   func compare(releaseVersionNumber: String,
-               launching: Launching) -> ResultAppVersion {
+               launching: Launching) -> AppUpdateStatus {
     if !launching.forceUpdate.version.isEmpty {
       switch releaseVersionNumber.appVersionCompare(launching.forceUpdate.version) {
-      case .orderedSame:
-        return ResultAppVersion.success
+      case .orderedSame, .orderedDescending:
+        return .valid
       case .orderedAscending:
         return .forcedUpdateRequired(message: launching.forceUpdate.message,
                                      appstoreURL: launching.appStoreURL)
-      case .orderedDescending:
-        return ResultAppVersion.success
       }
     }
     
-    return ResultAppVersion.success
+    return .valid
   }
 }

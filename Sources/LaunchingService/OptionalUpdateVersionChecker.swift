@@ -11,19 +11,17 @@ import Firebase
 
 final class OptionalUpdateVersionChecker: Sendable {
   func compare(releaseVersionNumber: String,
-               launching: Launching) -> ResultAppVersion {
+               launching: Launching) -> AppUpdateStatus {
     if !launching.optionalUpdate.version.isEmpty {
       switch releaseVersionNumber.appVersionCompare(launching.forceUpdate.version) {
-      case .orderedSame:
-        return ResultAppVersion.success
+      case .orderedSame, .orderedDescending:
+        return .valid
       case .orderedAscending:
         return .optionalUpdateRequired(message: launching.optionalUpdate.message,
                                        appstoreURL: launching.appStoreURL)
-      case .orderedDescending:
-        return ResultAppVersion.success
       }
     }
     
-    return ResultAppVersion.success
+    return .valid
   }
 }
