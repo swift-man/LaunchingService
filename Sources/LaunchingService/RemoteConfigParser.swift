@@ -46,7 +46,6 @@ final class RemoteConfigParser: Sendable {
     }
     
     return launching
-    
   }
   
   private func parseAppStoreURL() throws -> URL {
