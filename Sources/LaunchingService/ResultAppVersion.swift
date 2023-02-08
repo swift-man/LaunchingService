@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Enums
-public enum ResultAppVersion: Equatable {
+public enum ResultAppVersion: Equatable, Sendable {
   case success
   case forcedUpdateRequired(message: String, appstoreURL: URL)
   case optionalUpdateRequired(message: String, appstoreURL: URL)
