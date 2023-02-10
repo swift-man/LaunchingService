@@ -20,6 +20,9 @@
   * Check the notice alert presentation
 * Launch ContentView
 
+## Example Presentation Layer
+[LaunchingView](https://github.com/swift-man/LaunchingView) - SwiftUI
+
 ## Google Firebase
 ### [FirebaseRemoteConfig](https://github.com/firebase/firebase-ios-sdk) Async/await wrapper.
 
@@ -139,6 +142,3 @@ dependencies: [
     .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.6.0")
 ]
 ```
-
-## Example Presentation Layer
-[LaunchingView](https://github.com/swift-man/LaunchingView) - SwiftUI
