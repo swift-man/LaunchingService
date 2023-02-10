@@ -93,8 +93,28 @@ If the app is a blacklisted version, it is force updated.
 ## Notice
 ### DateFormat
 ```
-"yyyy-MM-dd'T'HH:mm:ssZ"
+yyyy-MM-ddTHH:mm:ssZ
 ```
+
+* noticeStartDateKey
+  * value: String (ex: 2023-02-12T02:22:40Z) // UTC
+  
+* noticeEndDateKey
+ * value: String (ex: 2023-02-12T02:22:40Z) // UTC
+ 
+### Title, Message
+* noticeAlertTitleKey
+  * value: String
+* noticeAlertMessageKey
+  * value: String
+
+### URL Landing
+* noticeAlertDoneURLKey
+  * value: String (ex: https://https://github.com/swift-man/LaunchingService/README.md)
+
+### App Terminate
+* noticeAlertDismissedTerminateKey
+  * value: Bool
 
 ## Installation
 ### Swift Package Manager
