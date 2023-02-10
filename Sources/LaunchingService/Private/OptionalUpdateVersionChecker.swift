@@ -8,15 +8,16 @@
 import Foundation
 
 final class OptionalUpdateVersionChecker: Sendable {
-  func compare(releaseVersionNumber: String,
+  func compare(releaseVersion: String,
                launching: Launching) -> AppUpdateStatus {
     if !launching.optionalUpdate.version.isEmpty {
-      switch releaseVersionNumber.appVersionCompare(launching.forceUpdate.version) {
+      switch releaseVersion.appVersionCompare(launching.forceUpdate.version) {
       case .orderedSame, .orderedDescending:
         return .valid
       case .orderedAscending:
-        return .optionalUpdateRequired(message: launching.optionalUpdate.message,
+        let updateMessage = UpdateInfo(message: launching.optionalUpdate.message,
                                        appstoreURL: launching.appStoreURL)
+        return .optionalUpdateRequired(updateMessage)
       }
     }
     
