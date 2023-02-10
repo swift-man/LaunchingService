@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  RemoteConfigParser.swift
 //  
 //
 //  Created by SwiftMan on 2023/02/10.

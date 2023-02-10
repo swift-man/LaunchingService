@@ -8,23 +8,6 @@
 import Firebase
 import FirebaseRemoteConfig
 
-public protocol LaunchingInteractable: AnyObject, Sendable {
-  func fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore) async throws -> AppUpdateStatus
-}
-
-extension LaunchingInteractable {
-  public func compare(releaseVersion: String, launching: Launching) -> AppUpdateStatus {
-    var updateState = VersionUpdateChecker().compare(releaseVersion: releaseVersion,
-                                                     launching: launching)
-    
-    if updateState == .valid {
-      updateState = NoticeChecker().compare(launching: launching)
-    }
-    
-    return updateState
-  }
-}
-
 /// 앱을 구성하기 전 외부로 부터 설정을 가져와 앱 상태를 반환하는 서비스 입니다.
 public final class LaunchingService: LaunchingInteractable, Sendable {
   /// Creates an instance with the given alignment.
