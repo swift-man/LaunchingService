@@ -15,9 +15,9 @@ final class ForceUpdateVersionChecker: Sendable {
       case .orderedSame, .orderedDescending:
         return .valid
       case .orderedAscending:
-        let updateMessage = UpdateInfo(message: launching.forceUpdate.message,
-                                       appstoreURL: launching.appStoreURL)
-        return .forcedUpdateRequired(updateMessage)
+        let alert = UpdateAlert(message: launching.forceUpdate.message,
+                                appstoreURL: launching.appStoreURL)
+        return .forcedUpdateRequired(alert)
       }
     }
     

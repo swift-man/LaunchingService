@@ -1,5 +1,5 @@
 //
-//  NoticeInfo.swift
+//  UpdateAlert.swift
 //  
 //
 //  Created by SwiftMan on 2023/02/10.
@@ -7,8 +7,22 @@
 
 import Foundation
 
+/// 업데이트 메시지
+public struct UpdateAlert: Sendable, Equatable {
+  /// message: 업데이트 메시지
+  public let message: String
+  
+  /// appstoreURL: 앱스토어 URL
+  public let appstoreURL: URL
+  
+  public init(message: String, appstoreURL: URL) {
+    self.message = message
+    self.appstoreURL = appstoreURL
+  }
+}
+
 /// 공지 얼럿 정보
-public struct NoticeInfo: Sendable, Equatable {
+public struct NoticeAlert: Sendable, Equatable {
   /// alert title: 얼럿 타이틀
   public let title: String
   
@@ -21,17 +35,13 @@ public struct NoticeInfo: Sendable, Equatable {
   /// alert doneURL: 확인 후 랜딩 URL
   public let doneURL: URL?
   
-  public let dateRange: ClosedRange<Date>
-  
   public init(title: String,
               message: String,
               isAppTerminated: Bool,
-              dateRange: ClosedRange<Date>,
               doneURL: URL?) {
     self.title = title
     self.message = message
     self.isAppTerminated = isAppTerminated
-    self.dateRange = dateRange
     self.doneURL = doneURL
   }
 }

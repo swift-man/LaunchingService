@@ -15,15 +15,15 @@ public enum AppUpdateStatus: Equatable, Sendable {
   /// 강제 업데이트 필요
   /// - Parameters:
   ///   - UpdateMessage: 강제 업데이트 메시지
-  case forcedUpdateRequired(UpdateInfo)
+  case forcedUpdateRequired(UpdateAlert)
   
   /// 선택 업데이트 필요
   /// - Parameters:
   ///   - UpdateMessage: 선택 업데이트 메시지
-  case optionalUpdateRequired(UpdateInfo)
+  case optionalUpdateRequired(UpdateAlert)
   
   /// 공지 얼럿 노출 필요
   /// - Parameters:
   ///   - NoticeInfo: 공지 사항 정보
-  case notice(NoticeInfo)
+  case notice(NoticeAlert)
 }

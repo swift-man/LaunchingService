@@ -13,11 +13,11 @@ final class RemoteConfigParser: Sendable {
       let versionParser = RemoteConfigVersionParser(keyStore: keyStore)
       let noticeParser = RemoteConfigNoticeParser(keyStore: keyStore)
       
-      let forceUpdate = Launching.UpdateInfo(version: try versionParser.parseForceUpdateAppVersionKey(),
-                                             message: versionParser.forceUpdateMessage)
+      let forceUpdate = AppUpdateInfo(version: try versionParser.parseForceUpdateAppVersionKey(),
+                                      message: versionParser.forceUpdateMessage)
       
-      let optionalUpdate = Launching.UpdateInfo(version: try versionParser.parseOptionalUpdateAppVersion(),
-                                                message: versionParser.optionalUpdateMessage)
+      let optionalUpdate = AppUpdateInfo(version: try versionParser.parseOptionalUpdateAppVersion(),
+                                         message: versionParser.optionalUpdateMessage)
       let appStoreURL = try parseAppStoreURL(keyStore: keyStore)
       let notice = noticeParser.parseNotice()
       

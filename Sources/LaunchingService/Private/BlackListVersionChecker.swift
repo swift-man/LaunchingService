@@ -12,9 +12,9 @@ final class BlackListVersionChecker: Sendable {
                launching: Launching) -> AppUpdateStatus {
     
     if launching.blackListVersions.contains(where: { $0.appVersionCompare(releaseVersion) == .orderedSame }) {
-      let updateMessage = UpdateInfo(message: launching.forceUpdate.message,
-                                     appstoreURL: launching.appStoreURL)
-      return .forcedUpdateRequired(updateMessage)
+      let alert = UpdateAlert(message: launching.forceUpdate.message,
+                              appstoreURL: launching.appStoreURL)
+      return .forcedUpdateRequired(alert)
     }
     
     return .valid

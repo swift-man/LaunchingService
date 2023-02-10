@@ -9,28 +9,63 @@ import XCTest
 import LaunchingService
 
 final class LaunchingServiceTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+  var service: LaunchingInteractable?
+  
+  func testRemoteConfigDataAllVersionIsEmpty_1() async throws {
+    service = LaunchingServiceMock(releaseVersion: "1.0.0",
+                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "",
+                                                                                   message: "forceUpdate"),
+                                                        optionalUpdate: AppUpdateInfo(version: "",
+                                                                                      message: "optionalUpdate"),
+                                                        blackListVersions: [],
+                                                        appStoreURL: URL(string: "https://github.com/swift-man/LaunchingService")!,
+                                                        notice: nil
+                                   ))
+    do {
+      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      XCTAssertEqual(appStatus, .valid)
+    } catch {
+      XCTFail("Wrong error")
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+  }
+  
+  func testRemoteConfigDataForceVersionIsEmpty_1() async throws {
+    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
+    let message = "forceUpdate"
+    service = LaunchingServiceMock(releaseVersion: "1.0.0",
+                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "1.0.1",
+                                                                                   message: message),
+                                                        optionalUpdate: AppUpdateInfo(version: "",
+                                                                                      message: "optionalUpdate"),
+                                                        blackListVersions: [],
+                                                        appStoreURL: url,
+                                                        notice: nil
+                                   ))
+    do {
+      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      XCTAssertEqual(appStatus, .forcedUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
+    } catch {
+      XCTFail("Wrong error")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+  }
+  
+  func testRemoteConfigDataOptionalVersionIsEmpty_1() async throws {
+    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
+    let message = "optionalUpdate"
+    service = LaunchingServiceMock(releaseVersion: "1.0.0",
+                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "",
+                                                                                   message: "forceUpdate"),
+                                                        optionalUpdate: AppUpdateInfo(version: "1.0.1",
+                                                                                      message: message),
+                                                        blackListVersions: [],
+                                                        appStoreURL: url,
+                                                        notice: nil
+                                   ))
+    do {
+      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      XCTAssertEqual(appStatus, .optionalUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
+    } catch {
+      XCTFail("Wrong error")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
+  }
 }
