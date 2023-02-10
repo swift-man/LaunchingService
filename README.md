@@ -139,6 +139,6 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.6.0")
+    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.7.0")
 ]
 ```
