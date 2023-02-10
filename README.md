@@ -8,6 +8,7 @@
 ![Badge - License](https://img.shields.io/badge/license-MIT-black?style=flat-square)  
 
 ---
+## 강제 업데이트 / 선택 업데이트 / 공지사항을 유저에게 제공합니다.
 
 ## Google Firebase
 ### [FirebaseRemoteConfig](https://github.com/firebase/firebase-ios-sdk) Async/await wrapper.
@@ -21,7 +22,7 @@
   * [x] message
   * [x] isAppTerminated
   * [x] button URL Link
-
+* [ ] Optional Update - Title
 
 ## API Call
 ```swift
