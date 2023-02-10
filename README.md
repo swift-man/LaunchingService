@@ -2,7 +2,7 @@
 
 ![Badge](https://img.shields.io/badge/swift-white.svg?style=flat-square&logo=Swift)
 ![Badge](https://img.shields.io/badge/SwiftUI-001b87.svg?style=flat-square&logo=Swift&logoColor=black)
-![Badge - Version](https://img.shields.io/badge/Version-0.6.1-1177AA?style=flat-square)
+![Badge - Version](https://img.shields.io/badge/Version-0.7.0-1177AA?style=flat-square)
 ![Badge - Swift Package Manager](https://img.shields.io/badge/SPM-compatible-orange?style=flat-square)
 ![Badge - Platform](https://img.shields.io/badge/platform-mac_12|ios_15-yellow?style=flat-square)
 ![Badge - License](https://img.shields.io/badge/license-MIT-black?style=flat-square)  
@@ -16,25 +16,40 @@
 * [x] Force Version Checked Update
 * [x] Optional Version Checked Update
 * [x] BlackList Version
-* [ ] Notice
-  * [ ] startDate ~ endDate
-  * [ ] message
-  * [ ] optional
-  * [ ] button URL Link
+* [x] Notice
+  * [x] startDate ~ endDate
+  * [x] message
+  * [x] isAppTerminated
+  * [x] button URL Link
 
 
 ## API Call
 ```swift
-let service = LaunchingService(keyStore: LaunchingServiceKeyStore())
-let appUpdateState = try await service.fetchLaunchingConfig()
+let service = LaunchingService()
+let appUpdateState = try await service.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
 ```
 
 ### API Response
 ```swift
+/// Result types App Update Status
 public enum AppUpdateStatus: Equatable, Sendable {
+  /// 유효
   case valid
-  case forcedUpdateRequired(message: String, appstoreURL: URL)
-  case optionalUpdateRequired(message: String, appstoreURL: URL)
+  
+  /// 강제 업데이트 필요
+  /// - Parameters:
+  ///   - UpdateMessage: 강제 업데이트 메시지
+  case forcedUpdateRequired(UpdateAlert)
+  
+  /// 선택 업데이트 필요
+  /// - Parameters:
+  ///   - UpdateMessage: 선택 업데이트 메시지
+  case optionalUpdateRequired(UpdateAlert)
+  
+  /// 공지 얼럿 노출 필요
+  /// - Parameters:
+  ///   - NoticeInfo: 공지 사항 정보
+  case notice(NoticeAlert)
 }
 ```
 
@@ -60,6 +75,7 @@ public enum LaunchingServiceError: Error {
 "optionalUpdateAppVersionKey" // (Optional Key, Value)
 "optionalUpdateMessageKey" // (Optional Value)
 "blackListVersionsKey" // (Optional Key, Value)
+...
 ```
 
 ### Your Custom Keys
@@ -68,6 +84,17 @@ let keyStore = LaunchingServiceKeyStore(appStoreURLKey: #YourCustomKey#, ...)
 let service = LaunchingService(keyStore: keyStore))
 ```
 
+## BlackList
+If the app is a blacklisted version, it is force updated.
+```
+1.0.0, 1.2.0, 2.0.0
+```
+
+## Notice
+### DateFormat
+```
+"yyyy-MM-dd'T'HH:mm:ssZ"
+```
 
 ## Installation
 ### Swift Package Manager

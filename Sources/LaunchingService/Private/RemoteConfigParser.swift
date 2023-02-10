@@ -2,35 +2,36 @@
 //  RemoteConfigParser.swift
 //  
 //
-//  Created by SwiftMan on 2023/02/06.
+//  Created by SwiftMan on 2023/02/10.
 //
 
 import FirebaseRemoteConfig
 
 final class RemoteConfigParser: Sendable {
-  let keyStore: LaunchingServiceKeyStore
-  
-  init(keyStore: LaunchingServiceKeyStore) {
-    self.keyStore = keyStore
-  }
-  
-  func parse() throws -> Launching {
-    let launching: Launching
+  func parse(keyStore: LaunchingServiceKeyStore) throws -> Launching {
     do {
-      launching = Launching(forceUpdate: UpdateInfo(version: try parseForceUpdateAppVersionKey(),
-                                                    message: forceUpdateMessage),
-                            optionalUpdate: UpdateInfo(version: try parseOptionalUpdateAppVersion(),
-                                                       message: optionalUpdateMessage),
-                            blackListVersions: parseBlackListVersions,
-                            appStoreURL: try parseAppStoreURL())
+      let versionParser = RemoteConfigVersionParser(keyStore: keyStore)
+      let noticeParser = RemoteConfigNoticeParser(keyStore: keyStore)
+      
+      let forceUpdate = AppUpdateInfo(version: try versionParser.parseForceUpdateAppVersionKey(),
+                                      message: versionParser.forceUpdateMessage)
+      
+      let optionalUpdate = AppUpdateInfo(version: try versionParser.parseOptionalUpdateAppVersion(),
+                                         message: versionParser.optionalUpdateMessage)
+      let appStoreURL = try parseAppStoreURL(keyStore: keyStore)
+      let notice = noticeParser.parseNotice()
+      
+      return Launching(forceUpdate: forceUpdate,
+                            optionalUpdate: optionalUpdate,
+                            blackListVersions: versionParser.parseBlackListVersions,
+                            appStoreURL: appStoreURL,
+                            notice: notice)
     } catch {
       throw error
     }
-    
-    return launching
   }
   
-  private func parseAppStoreURL() throws -> URL {
+  private func parseAppStoreURL(keyStore: LaunchingServiceKeyStore) throws -> URL {
     guard
       let appStoreURLString = RemoteConfig
         .remoteConfig()
@@ -45,60 +46,5 @@ final class RemoteConfigParser: Sendable {
     }
     
     return appStoreURL
-  }
-  
-  private func parseForceUpdateAppVersionKey() throws -> String {
-    guard
-      let forceUpdateAppVersion = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.forceUpdateAppVersionKey)
-        .stringValue
-    else {
-      throw LaunchingServiceError.notFoundForceUpdateAppVersionKey
-    }
-
-    return forceUpdateAppVersion
-  }
-  
-  private func parseOptionalUpdateAppVersion() throws -> String {
-    guard
-      let optionalUpdateVersion = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.optionalUpdateAppVersionKey)
-        .stringValue
-    else {
-      throw LaunchingServiceError.notFoundOptionalUpdateAppVersionKey
-    }
-
-    return optionalUpdateVersion
-  }
-  
-  private var forceUpdateMessage: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.forceUpdateMessageKey)
-      .stringValue ?? ""
-  }
-  
-  private var optionalUpdateMessage: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.optionalUpdateMessageKey)
-      .stringValue ?? ""
-  }
-  
-  private var parseBlackListVersions: [String] {
-    guard
-      let blackListVersionString = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.blackListVersionsKey)
-        .stringValue
-    else {
-      return []
-    }
-    
-    return blackListVersionString
-      .split(separator: ",")
-      .map { String($0) }
   }
 }
