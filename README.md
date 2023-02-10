@@ -114,7 +114,7 @@ yyyy-MM-ddTHH:mm:ssZ
   * value: String (ex: 2023-02-12T02:22:40Z) // UTC
   
 * noticeEndDateKey
- * value: String (ex: 2023-02-12T02:22:40Z) // UTC
+ * value: String (ex: 2023-02-14T05:12:55Z) // UTC
  
 ### Title, Message
 * noticeAlertTitleKey
