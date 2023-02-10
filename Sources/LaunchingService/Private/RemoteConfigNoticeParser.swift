@@ -27,7 +27,7 @@ final class RemoteConfigNoticeParser: Sendable {
     return NoticeInfo(title: noticeAlertTitle,
                       message: noticeAlertMessage,
                       isAppTerminated: noticeAlertDismissedTerminate,
-                      dateRange: noticeStartDate...noticeEndDate,
+                      dateRange: noticeStartDate ... noticeEndDate,
                       doneURL: noticeAlertDoneURL)
   }
   
@@ -53,6 +53,8 @@ final class RemoteConfigNoticeParser: Sendable {
         .stringValue
     else { return nil }
     
+    let dateFormatter = ISO8601DateFormatter()
+    dateFormatter.formatOptions = [.withInternetDateTime]
     return dateFormatter.date(from: startDateString)
   }
   
@@ -64,6 +66,8 @@ final class RemoteConfigNoticeParser: Sendable {
       .stringValue
     else { return nil }
     
+    let dateFormatter = ISO8601DateFormatter()
+    dateFormatter.formatOptions = [.withInternetDateTime]
     return dateFormatter.date(from: endDateString)
   }
   
@@ -82,11 +86,4 @@ final class RemoteConfigNoticeParser: Sendable {
     
     return URL(string: urlString)
   }
-  
-  private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "en_US_POSIX")
-    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-    return formatter
-  }()
 }

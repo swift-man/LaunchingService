@@ -32,7 +32,7 @@ final class NoticeTests: XCTestCase {
                                                                            doneURL: doneURL)
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .notice(NoticeAlert(title: title,
                                                     message: message,
                                                     isAppTerminated: isAppTerminated,
@@ -63,7 +63,7 @@ final class NoticeTests: XCTestCase {
                                                                            doneURL: doneURL)
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .valid)
     } catch {
       XCTFail("Wrong error")
@@ -91,7 +91,7 @@ final class NoticeTests: XCTestCase {
                                                                            doneURL: doneURL)
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .valid)
     } catch {
       XCTFail("Wrong error")

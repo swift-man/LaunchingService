@@ -25,7 +25,7 @@ final class OptionalUpdateTests: XCTestCase {
                                                         notice: nil
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertTrue(appStatus == .forcedUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
     } catch {
       XCTFail("Wrong error")
@@ -46,7 +46,7 @@ final class OptionalUpdateTests: XCTestCase {
                                                         notice: nil
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .optionalUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
     } catch {
       XCTFail("Wrong error")
@@ -67,7 +67,7 @@ final class OptionalUpdateTests: XCTestCase {
                                                         notice: nil
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .optionalUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
     } catch {
       XCTFail("Wrong error")
@@ -88,7 +88,7 @@ final class OptionalUpdateTests: XCTestCase {
                                                         notice: nil
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .valid)
     } catch {
       XCTFail("Wrong error")
@@ -109,7 +109,7 @@ final class OptionalUpdateTests: XCTestCase {
                                                         notice: nil
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .valid)
     } catch {
       XCTFail("Wrong error")
@@ -130,7 +130,7 @@ final class OptionalUpdateTests: XCTestCase {
                                                         notice: nil
                                    ))
     do {
-      let appStatus = try await service?.fetchAppStatus(keyStore: LaunchingServiceKeyStore())
+      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
       XCTAssertEqual(appStatus, .valid)
     } catch {
       XCTFail("Wrong error")

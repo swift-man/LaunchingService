@@ -7,10 +7,8 @@
 
 import Foundation
 
-public final class VersionUpdateChecker: Sendable {
-  public init() {}
-  
-  public func compare(releaseVersion: String,
+final class VersionUpdateChecker: Sendable {
+  func compare(releaseVersion: String,
                launching: Launching) -> AppUpdateStatus {
     let forceChecker = ForceUpdateVersionChecker()
     var appUpdateState = forceChecker.compare(releaseVersion: releaseVersion,
