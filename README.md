@@ -69,8 +69,8 @@ public enum AppUpdateStatus: Equatable, Sendable {
 ### API Error
 ```swift
 public enum LaunchingServiceError: Error {
-  case invalidAppStoreURLValue
-  case notFoundAppStoreURLKey
+  case invalidLinkURLValue
+  case notFoundLinkURLKey
   case notFoundForceUpdateAppVersionKey
   case notFoundOptionalUpdateAppVersionKey
   case invalidMainBundleReleaseVersionNumber
@@ -91,7 +91,7 @@ public enum LaunchingServiceError: Error {
 ...
 ```
 
-### Your Custom Keys
+### Your Custom Remote Config Keys
 ```swift
 import Dependencies
 
