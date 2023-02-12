@@ -8,9 +8,9 @@
 import FirebaseRemoteConfig
 
 final class RemoteConfigNoticeParser: Sendable {
-  let keyStore: LaunchingServiceKeyStore
+  let keyStore: RemoteConfigRegisterdKeys
   
-  init(keyStore: LaunchingServiceKeyStore) {
+  init(keyStore: RemoteConfigRegisterdKeys) {
     self.keyStore = keyStore
   }
   
@@ -31,25 +31,25 @@ final class RemoteConfigNoticeParser: Sendable {
                       doneURL: noticeAlertDoneURL)
   }
   
-  var noticeAlertTitle: String {
+  private var noticeAlertTitle: String {
     RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertTitleKey)
+      .configValue(forKey: keyStore.noticeKeys.alertTitleKey)
       .stringValue ?? ""
   }
   
-  var noticeAlertMessage: String {
+  private var noticeAlertMessage: String {
     RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertMessageKey)
+      .configValue(forKey: keyStore.noticeKeys.alertMessageKey)
       .stringValue ?? ""
   }
   
-  var noticeStartDate: Date? {
+  private var noticeStartDate: Date? {
     guard
       let startDateString = RemoteConfig
         .remoteConfig()
-        .configValue(forKey: keyStore.noticeStartDateKey)
+        .configValue(forKey: keyStore.noticeKeys.startDateKey)
         .stringValue
     else { return nil }
     
@@ -58,11 +58,11 @@ final class RemoteConfigNoticeParser: Sendable {
     return dateFormatter.date(from: startDateString)
   }
   
-  var noticeEndDate: Date? {
+  private var noticeEndDate: Date? {
     guard
       let endDateString = RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeEndDateKey)
+      .configValue(forKey: keyStore.noticeKeys.endDateKey)
       .stringValue
     else { return nil }
     
@@ -71,17 +71,17 @@ final class RemoteConfigNoticeParser: Sendable {
     return dateFormatter.date(from: endDateString)
   }
   
-  var noticeAlertDismissedTerminate: Bool {
+  private var noticeAlertDismissedTerminate: Bool {
     RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertDismissedTerminateKey)
+      .configValue(forKey: keyStore.noticeKeys.alertDismissedTerminateKey)
       .boolValue
   }
   
-  var noticeAlertDoneURL: URL? {
+  private var noticeAlertDoneURL: URL? {
     let urlString = RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertDoneURLKey)
+      .configValue(forKey: keyStore.noticeKeys.alertDoneURLKey)
       .stringValue ?? ""
     
     return URL(string: urlString)

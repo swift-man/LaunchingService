@@ -30,20 +30,26 @@ public enum AppUpdateStatus: Equatable, Sendable {
 
 /// 업데이트 메시지
 public struct UpdateAlert: Sendable, Equatable {
+  /// title: 업데이트 타이틀
+  public let title: String
+  
   /// message: 업데이트 메시지
   public let message: String
   
-  /// appstoreURL: 앱스토어 URL
-  public let appstoreURL: URL
+  /// alertDoneLinkURL: link URL
+  public let alertDoneLinkURL: URL
   
   
   /// Creates an instance with the given alignment.
   /// - Parameters:
   ///   - message: 업데이트 메시지
   ///   - appstoreURL: 앱스토어 URL
-  public init(message: String, appstoreURL: URL) {
+  public init(title: String,
+              message: String,
+              alertDoneLinkURL: URL) {
+    self.title = title
     self.message = message
-    self.appstoreURL = appstoreURL
+    self.alertDoneLinkURL = alertDoneLinkURL
   }
 }
 

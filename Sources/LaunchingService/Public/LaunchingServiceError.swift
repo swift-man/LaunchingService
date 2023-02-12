@@ -10,11 +10,11 @@ import Foundation
 /// Error types when `Not found` / `invalid` typed RemoteConfig Keys
 public enum LaunchingServiceError: Error, Equatable, Sendable {
   
-  /// Invalid AppStoreURLValue to nil.
-  case invalidAppStoreURLValue
+  /// Invalid LinkURLValue to nil.
+  case invalidLinkURLValue
   
-  /// Unknown user firebase remoteConfig Key `AppStore URL`
-  case notFoundAppStoreURLKey
+  /// Unknown user firebase remoteConfig Key `Link URL`
+  case notFoundLinkURLKey
   
   /// Unknown user firebase remoteConfig Key `Force Update Version`
   case notFoundForceUpdateAppVersionKey

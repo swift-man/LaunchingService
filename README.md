@@ -2,7 +2,7 @@
 
 ![Badge](https://img.shields.io/badge/swift-white.svg?style=flat-square&logo=Swift)
 ![Badge](https://img.shields.io/badge/SwiftUI-001b87.svg?style=flat-square&logo=Swift&logoColor=black)
-![Badge - Version](https://img.shields.io/badge/Version-0.7.0-1177AA?style=flat-square)
+![Badge - Version](https://img.shields.io/badge/Version-0.8.0-1177AA?style=flat-square)
 ![Badge - Swift Package Manager](https://img.shields.io/badge/SPM-compatible-orange?style=flat-square)
 ![Badge - Platform](https://img.shields.io/badge/platform-mac_12|ios_15-yellow?style=flat-square)
 ![Badge - License](https://img.shields.io/badge/license-MIT-black?style=flat-square)  
@@ -35,7 +35,6 @@
   * [x] message
   * [x] isAppTerminated
   * [x] button URL Link
-* [ ] Optional Update - Title
 
 ## API Call
 ```swift
@@ -70,8 +69,8 @@ public enum AppUpdateStatus: Equatable, Sendable {
 ### API Error
 ```swift
 public enum LaunchingServiceError: Error {
-  case invalidAppStoreURLValue
-  case notFoundAppStoreURLKey
+  case invalidLinkURLValue
+  case notFoundLinkURLKey
   case notFoundForceUpdateAppVersionKey
   case notFoundOptionalUpdateAppVersionKey
   case invalidMainBundleReleaseVersionNumber
@@ -83,7 +82,7 @@ public enum LaunchingServiceError: Error {
 ![Image](https://drive.google.com/uc?export=view&id=1f2dRMrS9SuRiVWXolqrGLXiCvrpgcVQd)  
 
 ```swift
-"appStoreURLKey"
+"forceUpdateAlertDoneLinkURLKey"
 "forceUpdateAppVersionKey" // (Optional Value)
 "forceUpdateMessageKey" // (Optional Key, Value)
 "optionalUpdateAppVersionKey" // (Optional Key, Value)
@@ -92,10 +91,17 @@ public enum LaunchingServiceError: Error {
 ...
 ```
 
-### Your Custom Keys
+### Your Custom Remote Config Keys
 ```swift
-let keyStore = LaunchingServiceKeyStore(appStoreURLKey: #YourCustomKey#, ...)
-let service = LaunchingService(keyStore: keyStore))
+import Dependencies
+
+extension RemoteConfigRegisterdKeys: DependencyKey {
+  public static var liveValue = RemoteConfigRegisterdKeys(
+    forceUpdateKeys: #...#
+    optionalUpdateKeys: #...#
+    noticeKeys : #...#
+  )
+}
 ```
 
 ## BlackList
@@ -139,6 +145,6 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.7.0")
+    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.8.0")
 ]
 ```
