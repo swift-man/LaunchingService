@@ -47,11 +47,11 @@ public struct RemoteConfigRegisterdKeys: Sendable {
     /// - Parameters:
     ///   - appVersionKey: `선택  업데이트 버전`의 키를 설정 합니다. 기본 값 : `optionalUpdateAppVersionKey`
     ///   - alertTitleKey: 선택 업데이트 버전의 `타이틀` 키를 설정 합니다. 기본 값 : `optionalUpdateAlertTitleKey`
-    ///   - alertMessageKey: 선택 업데이트 버전의 `메시지` 키를 설정 합니다. 기본 값 : `optionalUpdateMessageKey`
+    ///   - alertMessageKey: 선택 업데이트 버전의 `메시지` 키를 설정 합니다. 기본 값 : `optionalUpdateAlertMessageKey`
     ///   - alertDoneLinkURLKey: `선택 업데이트 URL` 키를 설정 합니다. 기본 값 : `optionalUpdateAlertDoneLinkURLKey`
     public init(appVersionKey: String = "optionalUpdateAppVersionKey",
                 alertTitleKey: String = "optionalUpdateAlertTitleKey",
-                alertMessageKey: String = "optionalUpdateMessageKey",
+                alertMessageKey: String = "optionalUpdateAlertMessageKey",
                 alertDoneLinkURLKey: String = "optionalUpdateAlertDoneLinkURLKey") {
       self.appVersionKey = appVersionKey
       self.alertTitleKey = alertTitleKey
