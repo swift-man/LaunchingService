@@ -8,6 +8,7 @@
 import XCTest
 import LaunchingService
 
+@MainActor
 class LaunchingServiceTests: XCTestCase {
   var service: LaunchingInteractable?
   

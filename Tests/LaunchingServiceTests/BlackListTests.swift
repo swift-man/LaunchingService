@@ -8,6 +8,7 @@
 import XCTest
 import LaunchingService
 
+@MainActor
 final class BlackListTests: LaunchingServiceTests {
   func testBlackListRequired_0() async throws {
     await tests(releaseVersion: "2.3.10",

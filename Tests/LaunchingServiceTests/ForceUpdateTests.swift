@@ -8,6 +8,7 @@
 import XCTest
 import LaunchingService
 
+@MainActor
 final class ForceUpdateTests: LaunchingServiceTests {
   func testAllVersionIsEmpty_1() async throws {
     await tests(releaseVersion: "1.0.0",

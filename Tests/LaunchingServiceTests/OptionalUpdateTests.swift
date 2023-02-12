@@ -8,6 +8,7 @@
 import XCTest
 import LaunchingService
 
+@MainActor
 final class OptionalUpdateTests: LaunchingServiceTests {
   func testDataOptionalVersionRequired_1() async throws {
     await tests(releaseVersion: "1.0.0",

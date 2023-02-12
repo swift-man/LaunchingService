@@ -8,6 +8,7 @@
 import Foundation
 import LaunchingService
 
+@MainActor
 final class LaunchingServiceMock: LaunchingInteractable, Sendable {
   let releaseVersion: String
   let launching: Launching
