@@ -5,46 +5,30 @@
 //  Created by SwiftMan on 2023/02/10.
 //
 
-import FirebaseRemoteConfig
+import Dependencies
 
 final class RemoteConfigParser: Sendable {
-  func parse(keyStore: LaunchingServiceKeyStore) throws -> Launching {
+  func parse() throws -> Launching {
+    @Dependency(\.remoteConfigRegisterdKeys)
+    var remoteConfigRegisterdKeys
+    
     do {
-      let versionParser = RemoteConfigVersionParser(keyStore: keyStore)
-      let noticeParser = RemoteConfigNoticeParser(keyStore: keyStore)
+      let forceParser = RemoteConfigForceUpdateParser(keyStore: remoteConfigRegisterdKeys)
+      let noticeParser = RemoteConfigNoticeParser(keyStore: remoteConfigRegisterdKeys)
       
-      let forceUpdate = AppUpdateInfo(version: try versionParser.parseForceUpdateAppVersionKey(),
-                                      message: versionParser.forceUpdateMessage)
+      let forceUpdate = try forceParser.parseAppUpdateInfo()
       
-      let optionalUpdate = AppUpdateInfo(version: try versionParser.parseOptionalUpdateAppVersion(),
-                                         message: versionParser.optionalUpdateMessage)
-      let appStoreURL = try parseAppStoreURL(keyStore: keyStore)
+      let optionalParser = RemoteConfigOptionalUpdateParser(keyStore: remoteConfigRegisterdKeys)
+      let optionalUpdate = try optionalParser.parseAppUpdateInfo()
+      
       let notice = noticeParser.parseNotice()
       
       return Launching(forceUpdate: forceUpdate,
-                            optionalUpdate: optionalUpdate,
-                            blackListVersions: versionParser.parseBlackListVersions,
-                            appStoreURL: appStoreURL,
-                            notice: notice)
+                       optionalUpdate: optionalUpdate,
+                       blackListVersions: forceParser.parseBlackListVersions,
+                       notice: notice)
     } catch {
       throw error
     }
-  }
-  
-  private func parseAppStoreURL(keyStore: LaunchingServiceKeyStore) throws -> URL {
-    guard
-      let appStoreURLString = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.appStoreURLKey)
-        .stringValue
-    else {
-      throw LaunchingServiceError.notFoundAppStoreURLKey
-    }
-    
-    guard let appStoreURL = URL(string: appStoreURLString) else {
-      throw LaunchingServiceError.invalidAppStoreURLValue
-    }
-    
-    return appStoreURL
   }
 }

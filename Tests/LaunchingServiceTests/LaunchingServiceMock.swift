@@ -18,7 +18,11 @@ final class LaunchingServiceMock: LaunchingInteractable, Sendable {
     self.launching = launching
   }
   
-  func fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore = LaunchingServiceKeyStore()) async throws -> AppUpdateStatus {
+  func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
     return compare(releaseVersion: releaseVersion, launching: launching)
   }
+}
+
+extension UpdateAlert {
+  static let mock = UpdateAlert(title: "", message: "", alertDoneLinkURL: URL(string: "https://github.com/swift-man/LaunchingService")!)
 }

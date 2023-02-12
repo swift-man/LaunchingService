@@ -8,9 +8,9 @@
 import FirebaseRemoteConfig
 
 final class RemoteConfigNoticeParser: Sendable {
-  let keyStore: LaunchingServiceKeyStore
+  let keyStore: RemoteConfigRegisterdKeys
   
-  init(keyStore: LaunchingServiceKeyStore) {
+  init(keyStore: RemoteConfigRegisterdKeys) {
     self.keyStore = keyStore
   }
   
@@ -34,14 +34,14 @@ final class RemoteConfigNoticeParser: Sendable {
   var noticeAlertTitle: String {
     RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertTitleKey)
+      .configValue(forKey: keyStore.noticeKeys.alertTitleKey)
       .stringValue ?? ""
   }
   
   var noticeAlertMessage: String {
     RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertMessageKey)
+      .configValue(forKey: keyStore.noticeKeys.alertMessageKey)
       .stringValue ?? ""
   }
   
@@ -49,7 +49,7 @@ final class RemoteConfigNoticeParser: Sendable {
     guard
       let startDateString = RemoteConfig
         .remoteConfig()
-        .configValue(forKey: keyStore.noticeStartDateKey)
+        .configValue(forKey: keyStore.noticeKeys.startDateKey)
         .stringValue
     else { return nil }
     
@@ -62,7 +62,7 @@ final class RemoteConfigNoticeParser: Sendable {
     guard
       let endDateString = RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeEndDateKey)
+      .configValue(forKey: keyStore.noticeKeys.endDateKey)
       .stringValue
     else { return nil }
     
@@ -74,14 +74,14 @@ final class RemoteConfigNoticeParser: Sendable {
   var noticeAlertDismissedTerminate: Bool {
     RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertDismissedTerminateKey)
+      .configValue(forKey: keyStore.noticeKeys.alertDismissedTerminateKey)
       .boolValue
   }
   
   var noticeAlertDoneURL: URL? {
     let urlString = RemoteConfig
       .remoteConfig()
-      .configValue(forKey: keyStore.noticeAlertDoneURLKey)
+      .configValue(forKey: keyStore.noticeKeys.alertDoneURLKey)
       .stringValue ?? ""
     
     return URL(string: urlString)

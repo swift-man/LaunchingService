@@ -15,8 +15,9 @@ final class OptionalUpdateVersionChecker: Sendable {
       case .orderedSame, .orderedDescending:
         return .valid
       case .orderedAscending:
-        let alert = UpdateAlert(message: launching.optionalUpdate.message,
-                                appstoreURL: launching.appStoreURL)
+        let alert = UpdateAlert(title: launching.optionalUpdate.alertTitle,
+                                message: launching.optionalUpdate.alertMessage,
+                                alertDoneLinkURL: launching.optionalUpdate.alertDoneLinkURL)
         return .optionalUpdateRequired(alert)
       }
     }

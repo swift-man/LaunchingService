@@ -8,150 +8,67 @@
 import XCTest
 import LaunchingService
 
-final class ForceUpdateTests: XCTestCase {
-  var service: LaunchingInteractable?
-  
+final class ForceUpdateTests: LaunchingServiceTests {
   func testAllVersionIsEmpty_1() async throws {
-    service = LaunchingServiceMock(releaseVersion: "1.0.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "",
-                                                                                   message: "forceUpdate"),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: URL(string: "https://github.com/swift-man/LaunchingService")!,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .valid)
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0.0",
+                forceVersion: "",
+                optionalUpdate: "",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .valid)
   }
   
   func testForceVersionRequired_1() async throws {
-    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
-    let message = "forceUpdate"
-    
-    service = LaunchingServiceMock(releaseVersion: "1.0.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "1.0.1",
-                                                                                   message: message),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: url,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .forcedUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0.0",
+                forceVersion: "1.0.1",
+                optionalUpdate: "",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .forcedUpdateRequired(.mock))
   }
   
   func testForceVersionRequired_2() async throws {
-    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
-    let message = "forceUpdate"
-    
-    service = LaunchingServiceMock(releaseVersion: "1.0.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "1.0.1",
-                                                                                   message: message),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: url,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .forcedUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0.0",
+                forceVersion: "1.0.1",
+                optionalUpdate: "2.0.0",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .forcedUpdateRequired(.mock))
   }
   
   func testForceVersionRequired_3() async throws {
-    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
-    let message = "forceUpdate"
-    
-    service = LaunchingServiceMock(releaseVersion: "1.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "2.0.5",
-                                                                                   message: message),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: url,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .forcedUpdateRequired(UpdateAlert(message: message, appstoreURL: url)))
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0",
+                forceVersion: "2.0.5",
+                optionalUpdate: "",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .forcedUpdateRequired(.mock))
   }
   
   func testForceVersionValid_1() async throws {
-    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
-    let message = "forceUpdate"
-    
-    service = LaunchingServiceMock(releaseVersion: "1.0.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "1.0.0",
-                                                                                   message: message),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: url,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .valid)
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0.0",
+                forceVersion: "1.0.0",
+                optionalUpdate: "",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .valid)
   }
   
   func testForceVersionValid_2() async throws {
-    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
-    let message = "forceUpdate"
-    
-    service = LaunchingServiceMock(releaseVersion: "1.0.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "0.0.9",
-                                                                                   message: message),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: url,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .valid)
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0.0",
+                forceVersion: "0.0.9",
+                optionalUpdate: "",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .valid)
   }
   
   func testForceVersionValid_3() async throws {
-    let url = URL(string: "https://github.com/swift-man/LaunchingService")!
-    let message = "forceUpdate"
-    
-    service = LaunchingServiceMock(releaseVersion: "1.0.0",
-                                   launching: Launching(forceUpdate: AppUpdateInfo(version: "0.1",
-                                                                                   message: message),
-                                                        optionalUpdate: AppUpdateInfo(version: "",
-                                                                                      message: "optionalUpdate"),
-                                                        blackListVersions: [],
-                                                        appStoreURL: url,
-                                                        notice: nil
-                                   ))
-    do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: LaunchingServiceKeyStore())
-      XCTAssertEqual(appStatus, .valid)
-    } catch {
-      XCTFail("Wrong error")
-    }
+    await tests(releaseVersion: "1.0.0",
+                forceVersion: "0.1",
+                optionalUpdate: "",
+                blackListVersions: [],
+                notice: nil,
+                isEqualStatus: .valid)
   }
 }
