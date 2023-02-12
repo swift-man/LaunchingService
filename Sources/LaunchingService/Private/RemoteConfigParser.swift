@@ -8,17 +8,14 @@
 import Dependencies
 
 final class RemoteConfigParser: Sendable {
-  func parse() throws -> Launching {
-    @Dependency(\.remoteConfigRegisterdKeys)
-    var remoteConfigRegisterdKeys
-    
+  func parse(keyStore: RemoteConfigRegisterdKeys) throws -> Launching {
     do {
-      let forceParser = RemoteConfigForceUpdateParser(keyStore: remoteConfigRegisterdKeys)
-      let noticeParser = RemoteConfigNoticeParser(keyStore: remoteConfigRegisterdKeys)
+      let forceParser = RemoteConfigForceUpdateParser(keyStore: keyStore)
+      let noticeParser = RemoteConfigNoticeParser(keyStore: keyStore)
       
       let forceUpdate = try forceParser.parseAppUpdateInfo()
       
-      let optionalParser = RemoteConfigOptionalUpdateParser(keyStore: remoteConfigRegisterdKeys)
+      let optionalParser = RemoteConfigOptionalUpdateParser(keyStore: keyStore)
       let optionalUpdate = try optionalParser.parseAppUpdateInfo()
       
       let notice = noticeParser.parseNotice()

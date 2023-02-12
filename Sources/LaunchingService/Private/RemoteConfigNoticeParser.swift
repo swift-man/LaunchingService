@@ -31,21 +31,21 @@ final class RemoteConfigNoticeParser: Sendable {
                       doneURL: noticeAlertDoneURL)
   }
   
-  var noticeAlertTitle: String {
+  private var noticeAlertTitle: String {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertTitleKey)
       .stringValue ?? ""
   }
   
-  var noticeAlertMessage: String {
+  private var noticeAlertMessage: String {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertMessageKey)
       .stringValue ?? ""
   }
   
-  var noticeStartDate: Date? {
+  private var noticeStartDate: Date? {
     guard
       let startDateString = RemoteConfig
         .remoteConfig()
@@ -58,7 +58,7 @@ final class RemoteConfigNoticeParser: Sendable {
     return dateFormatter.date(from: startDateString)
   }
   
-  var noticeEndDate: Date? {
+  private var noticeEndDate: Date? {
     guard
       let endDateString = RemoteConfig
       .remoteConfig()
@@ -71,14 +71,14 @@ final class RemoteConfigNoticeParser: Sendable {
     return dateFormatter.date(from: endDateString)
   }
   
-  var noticeAlertDismissedTerminate: Bool {
+  private var noticeAlertDismissedTerminate: Bool {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertDismissedTerminateKey)
       .boolValue
   }
   
-  var noticeAlertDoneURL: URL? {
+  private var noticeAlertDoneURL: URL? {
     let urlString = RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertDoneURLKey)

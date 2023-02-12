@@ -18,7 +18,7 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
   /// Firebase - RemoteConfig 의 값을 가져오고 계산 된 앱의 상태를 반환 합니다.
   /// - Parameter keyStore: Firebase - RemoteConfig Custom Key 를 설정합니다.
   /// - Returns: AppUpdateStatus - `valid`, `forceUpdate`, `optionalUpdate`
-  public func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
+  public func fetchAppUpdateStatus(keyStore: RemoteConfigRegisterdKeys) async throws -> AppUpdateStatus {
     return try await withCheckedThrowingContinuation({ [weak self] (continuation: CheckedContinuation<AppUpdateStatus, Error>) in
       RemoteConfig.remoteConfig()
         .fetch(withExpirationDuration: 0) { [weak self] (status, error) in
@@ -35,7 +35,7 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
           
           do {
             let releaseVersion = try MainBundle().releaseVersion()
-            let launching = try RemoteConfigParser().parse()
+            let launching = try RemoteConfigParser().parse(keyStore: keyStore)
             let updateState = self.compare(releaseVersion: releaseVersion, launching: launching)
             
             continuation.resume(returning: updateState)
@@ -45,15 +45,4 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
         }
     })
   }
-}
-
-extension DependencyValues {
-  public var remoteConfigRegisterdKeys: RemoteConfigRegisterdKeys {
-    get { self[RemoteConfigRegisterdKeys.self] }
-    set { self[RemoteConfigRegisterdKeys.self] = newValue }
-  }
-}
-
-extension RemoteConfigRegisterdKeys: DependencyKey {
-  public static var liveValue = RemoteConfigRegisterdKeys()
 }

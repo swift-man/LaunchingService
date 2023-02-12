@@ -15,7 +15,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
     let alertMessageKey: String
     let alertDoneLinkURLKey: String
     let blackListVersionsKey: String
-
+    
     /// Firebase RemoteConfig 의 `강제 업데이트`키 값을 커스텀으로 설정 합니다.
     /// - Parameters:
     ///   - appVersionKey: `강제 업데이트 버전`의 키를 설정 합니다. 기본 값 : `forceUpdateAppVersionKey`
@@ -35,7 +35,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
       self.blackListVersionsKey = blackListVersionsKey
     }
   }
-
+  
   public struct OptionalUpdateKeys: Sendable {
     let appVersionKey: String
     let alertTitleKey: String
@@ -58,7 +58,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
       self.alertDoneLinkURLKey = alertDoneLinkURLKey
     }
   }
-
+  
   public struct NoticeKeys: Sendable {
     let alertTitleKey: String
     let alertMessageKey: String
@@ -80,7 +80,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
                 startDateKey: String = "noticeStartDateKey",
                 endDateKey: String = "noticeEndDateKey",
                 alertDoneURLKey: String = "noticeAlertDoneURLKey",
-         alertDismissedTerminateKey: String = "noticeAlertDismissedTerminateKey") {
+                alertDismissedTerminateKey: String = "noticeAlertDismissedTerminateKey") {
       self.alertTitleKey = alertTitleKey
       self.alertMessageKey = alertMessageKey
       self.startDateKey = startDateKey
