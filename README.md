@@ -9,6 +9,19 @@
 
 ---
 ## 강제 업데이트 / 선택 업데이트 / 공지사항을 유저에게 제공합니다.
+### Process Plan
+* Launch App
+* Force Update
+  * Check the forced update version
+  * Check the blacklist update versions
+* Optional Update
+  * Check the optional update version
+* Notice Alert
+  * Check the notice alert presentation
+* Launch ContentView
+
+## Example Presentation Layer
+[LaunchingView](https://github.com/swift-man/LaunchingView) - SwiftUI
 
 ## Google Firebase
 ### [FirebaseRemoteConfig](https://github.com/firebase/firebase-ios-sdk) Async/await wrapper.
@@ -101,7 +114,7 @@ yyyy-MM-ddTHH:mm:ssZ
   * value: String (ex: 2023-02-12T02:22:40Z) // UTC
   
 * noticeEndDateKey
- * value: String (ex: 2023-02-12T02:22:40Z) // UTC
+ * value: String (ex: 2023-02-14T05:12:55Z) // UTC
  
 ### Title, Message
 * noticeAlertTitleKey
@@ -126,9 +139,6 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.6.0")
+    .package(url: "https://github.com/swift-man/LaunchingService.git", .from: "0.7.0")
 ]
 ```
-
-## Example Presentation Layer
-[LaunchingView](https://github.com/swift-man/LaunchingView) - SwiftUI
