@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Dependencies
 
 /// Firebase RemoteConfig 의 alignment 를 설정 합니다.
 public struct RemoteConfigRegisterdKeys: Sendable {
@@ -109,4 +110,15 @@ public struct RemoteConfigRegisterdKeys: Sendable {
   }
 }
 
+extension RemoteConfigRegisterdKeys: TestDependencyKey {
+  public static var testValue: RemoteConfigRegisterdKeys {
+    RemoteConfigRegisterdKeys()
+  }
+}
 
+extension DependencyValues {
+  public var remoteConfigRegisterdKeys: RemoteConfigRegisterdKeys {
+    get { self[RemoteConfigRegisterdKeys.self] }
+    set { self[RemoteConfigRegisterdKeys.self] = newValue }
+  }
+}

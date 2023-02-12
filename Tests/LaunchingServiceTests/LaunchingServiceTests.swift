@@ -59,7 +59,7 @@ class LaunchingServiceTests: XCTestCase {
                                    ))
     
     do {
-      let appStatus = try await service?.fetchAppUpdateStatus(keyStore: RemoteConfigRegisterdKeys())
+      let appStatus = try await service?.fetchAppUpdateStatus()
       XCTAssertEqual(appStatus, isEqualStatus)
     } catch {
       XCTFail("Wrong error")

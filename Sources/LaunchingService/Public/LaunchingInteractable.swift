@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol LaunchingInteractable: AnyObject, Sendable {
-  func fetchAppUpdateStatus(keyStore: RemoteConfigRegisterdKeys) async throws -> AppUpdateStatus
+  func fetchAppUpdateStatus() async throws -> AppUpdateStatus
 }
 
 extension LaunchingInteractable {

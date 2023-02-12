@@ -19,7 +19,7 @@ final class LaunchingServiceMock: LaunchingInteractable, Sendable {
     self.launching = launching
   }
   
-  func fetchAppUpdateStatus(keyStore: RemoteConfigRegisterdKeys) async throws -> AppUpdateStatus {
+  func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
     return compare(releaseVersion: releaseVersion, launching: launching)
   }
 }
