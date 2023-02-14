@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public struct Launching: Sendable {
   public let forceUpdate: AppUpdateInfo
   public let optionalUpdate: AppUpdateInfo
@@ -25,6 +26,7 @@ public struct Launching: Sendable {
   }
 }
 
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public struct AppUpdateInfo: Sendable {
   public let version: String
   public let alertTitle: String
@@ -43,6 +45,7 @@ public struct AppUpdateInfo: Sendable {
 }
 
 /// 공지 얼럿 정보
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public struct NoticeInfo: Sendable, Equatable {
   /// alert title: 얼럿 타이틀
   public let title: String

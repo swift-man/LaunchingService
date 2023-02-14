@@ -10,6 +10,7 @@ import FirebaseRemoteConfig
 import Dependencies
 
 /// 앱을 구성하기 전 외부로 부터 설정을 가져와 앱 상태를 반환하는 서비스 입니다.
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public final class LaunchingService: LaunchingInteractable, Sendable {
   /// Creates an instance with the given alignment.
   public init() {

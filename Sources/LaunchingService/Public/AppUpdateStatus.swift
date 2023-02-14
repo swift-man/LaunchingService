@@ -8,6 +8,7 @@
 import Foundation
 
 /// Result types App Update Status
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public enum AppUpdateStatus: Equatable, Sendable {
   /// 유효
   case valid
@@ -29,6 +30,7 @@ public enum AppUpdateStatus: Equatable, Sendable {
 }
 
 /// 업데이트 메시지
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public struct UpdateAlert: Sendable, Equatable {
   /// title: 업데이트 타이틀
   public let title: String
@@ -54,6 +56,7 @@ public struct UpdateAlert: Sendable, Equatable {
 }
 
 /// 공지 얼럿 정보
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public struct NoticeAlert: Sendable, Equatable {
   /// alert title: 얼럿 타이틀
   public let title: String
