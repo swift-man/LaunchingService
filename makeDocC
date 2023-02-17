@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Script executed from: ${PWD}"\
+
+$(xcrun --find docc) process-archive \
+transform-for-static-hosting LaunchingService.doccarchive \
+--output-path ${PWD}/docs \
+--hosting-base-path swift-man.github.io/LaunchingService/
