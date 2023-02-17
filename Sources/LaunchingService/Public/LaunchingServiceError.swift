@@ -8,6 +8,7 @@
 import Foundation
 
 /// Error types when `Not found` / `invalid` typed RemoteConfig Keys
+@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public enum LaunchingServiceError: Error, Equatable, Sendable {
   
   /// Invalid LinkURLValue to nil.
