@@ -18,8 +18,8 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
   
   /// Firebase - RemoteConfig 의 값을 가져오고 계산 된 앱의 상태를 반환 합니다.
   ///
-  /// - Returns: AppUpdateStatus - `valid`, `forceUpdate`, `optionalUpdate`
-  /// - Throws: LaunchingServiceError
+  /// - Returns: ``AppUpdateStatus`` - `valid`, `forceUpdate`, `optionalUpdate`
+  /// - Throws: ``LaunchingServiceError``
   public func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
     return try await withCheckedThrowingContinuation({ [weak self] (continuation: CheckedContinuation<AppUpdateStatus, Error>) in
       RemoteConfig.remoteConfig()

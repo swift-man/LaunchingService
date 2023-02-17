@@ -11,6 +11,7 @@ import Dependencies
 /// Firebase RemoteConfig 의 alignment 를 설정 합니다.
 @available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
 public struct RemoteConfigRegisterdKeys: Sendable {
+  
   @available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
   public struct ForceUpdateKeys: Sendable {
     let appVersionKey: String
@@ -98,7 +99,6 @@ public struct RemoteConfigRegisterdKeys: Sendable {
   let forceUpdateKeys: ForceUpdateKeys
   let optionalUpdateKeys: OptionalUpdateKeys
   let noticeKeys: NoticeKeys
-  
   
   /// Firebase RemoteConfig 의 키 값을 커스텀으로 설정 합니다.
   /// - Parameters:
