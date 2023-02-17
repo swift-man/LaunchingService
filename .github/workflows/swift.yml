@@ -20,11 +20,4 @@ jobs:
       run: swift build -v
     - name: Run tests
       run: swift test -v
-    - uses: fwcd/swift-docc-action@v1
-      with:
-        target: LaunchingService
-        output: ./docs
-        hosting-base-path: 'LaunchingService'
-        disable-indexing: 'true'
-        transform-for-static-hosting: 'true'
 
