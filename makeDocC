@@ -1,9 +1,0 @@
-#!/bin/bash
-echo "Script executed from: ${PWD}"\
-
-rm -rf ${PWD}/docs
-
-$(xcrun --find docc) process-archive \
-transform-for-static-hosting LaunchingService.doccarchive \
---output-path ${PWD}/docs \
---hosting-base-path https://blog.slarea.com/LaunchingService/
