@@ -133,7 +133,7 @@ yyyy-MM-ddTHH:mm:ssZ
 
 ### URL Landing
 * noticeAlertDoneURLKey
-  * value: String (ex: https://https://github.com/swift-man/LaunchingService/README.md)
+  * value: String (ex: https://google.com)
 
 ### App Terminate
 * noticeAlertDismissedTerminateKey
