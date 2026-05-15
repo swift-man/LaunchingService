@@ -5,6 +5,7 @@
 //  Created by SwiftMan on 2023/02/06.
 //
 
+import Foundation
 import FirebaseRemoteConfig
 
 final class RemoteConfigForceUpdateParser: Sendable {
@@ -22,26 +23,23 @@ final class RemoteConfigForceUpdateParser: Sendable {
   }
   
   var parseBlackListVersions: [String] {
-    guard
-      let blackListVersionString = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.forceUpdateKeys.blackListVersionsKey)
-        .stringValue
-    else {
-      return []
-    }
+    let blackListVersionString = RemoteConfig
+      .remoteConfig()
+      .configValue(forKey: keyStore.forceUpdateKeys.blackListVersionsKey)
+      .stringValue
     
     return blackListVersionString
       .split(separator: ",")
-      .map { String($0) }
+      .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+      .filter { !$0.isEmpty }
   }
   
   private func parseForceDoneLinkURL() throws -> URL {
-    guard
-      let urlString = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.forceUpdateKeys.alertDoneLinkURLKey)
-        .stringValue
+    guard let urlString = RemoteConfig
+      .remoteConfig()
+      .configValue(forKey: keyStore.forceUpdateKeys.alertDoneLinkURLKey)
+      .stringValue
+      .nilIfBlank
     else {
       throw LaunchingServiceError.notFoundLinkURLKey
     }
@@ -54,11 +52,11 @@ final class RemoteConfigForceUpdateParser: Sendable {
   }
 
   private func parseForceUpdateAppVersionKey() throws -> String {
-    guard
-      let forceUpdateAppVersion = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.forceUpdateKeys.appVersionKey)
-        .stringValue
+    guard let forceUpdateAppVersion = RemoteConfig
+      .remoteConfig()
+      .configValue(forKey: keyStore.forceUpdateKeys.appVersionKey)
+      .stringValue
+      .nilIfBlank
     else {
       throw LaunchingServiceError.notFoundForceUpdateAppVersionKey
     }
@@ -70,13 +68,13 @@ final class RemoteConfigForceUpdateParser: Sendable {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.forceUpdateKeys.alertTitleKey)
-      .stringValue ?? ""
+      .stringValue
   }
   
   private var forceUpdateMessage: String {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.forceUpdateKeys.alertMessageKey)
-      .stringValue ?? ""
+      .stringValue
   }
 }

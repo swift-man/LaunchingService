@@ -8,6 +8,11 @@
 import Foundation
 
 extension String {
+  var nilIfBlank: String? {
+    let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? nil : trimmed
+  }
+
   func appVersionCompare(_ otherVersion: String) -> ComparisonResult {
     let versionDelimiter = "."
     

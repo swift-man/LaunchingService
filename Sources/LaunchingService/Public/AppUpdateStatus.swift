@@ -37,15 +37,16 @@ public struct UpdateAlert: Sendable, Equatable {
   
   /// message: 업데이트 메시지
   public let message: String
-  
+
   /// alertDoneLinkURL: link URL
   public let alertDoneLinkURL: URL
-  
-  
+
+
   /// Creates an instance with the given alignment.
   /// - Parameters:
+  ///   - title: 업데이트 타이틀
   ///   - message: 업데이트 메시지
-  ///   - appstoreURL: 앱스토어 URL
+  ///   - alertDoneLinkURL: 앱스토어 URL
   public init(title: String,
               message: String,
               alertDoneLinkURL: URL) {

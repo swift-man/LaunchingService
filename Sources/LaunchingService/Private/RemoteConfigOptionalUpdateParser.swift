@@ -5,6 +5,7 @@
 //  Created by SwiftMan on 2023/02/12.
 //
 
+import Foundation
 import FirebaseRemoteConfig
 
 final class RemoteConfigOptionalUpdateParser: Sendable {
@@ -14,54 +15,59 @@ final class RemoteConfigOptionalUpdateParser: Sendable {
     self.keyStore = keyStore
   }
   
-  func parseAppUpdateInfo() throws -> AppUpdateInfo {
-    return AppUpdateInfo(version: try parseOptionalUpdateAppVersion(),
+  func parseAppUpdateInfo() -> AppUpdateInfo {
+    guard
+      let optionalUpdateVersion = parseOptionalUpdateAppVersion(),
+      let optionalDoneLinkURL = parseOptionalDoneLinkURL()
+    else {
+      return .inactiveOptionalUpdate
+    }
+
+    return AppUpdateInfo(version: optionalUpdateVersion,
                          alertTitle: optionalUpdateTitle,
                          alertMessage: optionalUpdateMessage,
-                         alertDoneLinkURL: try parseOptionalDoneLinkURL())
+                         alertDoneLinkURL: optionalDoneLinkURL)
   }
   
-  private func parseOptionalUpdateAppVersion() throws -> String {
-    guard
-      let optionalUpdateVersion = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.optionalUpdateKeys.appVersionKey)
-        .stringValue
-    else {
-      throw LaunchingServiceError.notFoundOptionalUpdateAppVersionKey
-    }
-    
-    return optionalUpdateVersion
+  private func parseOptionalUpdateAppVersion() -> String? {
+    return RemoteConfig
+      .remoteConfig()
+      .configValue(forKey: keyStore.optionalUpdateKeys.appVersionKey)
+      .stringValue
+      .nilIfBlank
   }
   
-  private func parseOptionalDoneLinkURL() throws -> URL {
-    guard
-      let urlString = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.forceUpdateKeys.alertDoneLinkURLKey)
-        .stringValue
-    else {
-      throw LaunchingServiceError.notFoundLinkURLKey
-    }
-    
-    guard let url = URL(string: urlString) else {
-      throw LaunchingServiceError.invalidLinkURLValue
-    }
-    
-    return url
+  private func parseOptionalDoneLinkURL() -> URL? {
+    guard let urlString = RemoteConfig
+      .remoteConfig()
+      .configValue(forKey: keyStore.optionalUpdateKeys.alertDoneLinkURLKey)
+      .stringValue
+      .nilIfBlank
+    else { return nil }
+
+    return URL(string: urlString)
   }
   
   private var optionalUpdateTitle: String {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.optionalUpdateKeys.alertTitleKey)
-      .stringValue ?? ""
+      .stringValue
   }
   
   private var optionalUpdateMessage: String {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.optionalUpdateKeys.alertMessageKey)
-      .stringValue ?? ""
+      .stringValue
+  }
+}
+
+private extension AppUpdateInfo {
+  static var inactiveOptionalUpdate: AppUpdateInfo {
+    AppUpdateInfo(version: "",
+                  alertTitle: "",
+                  alertMessage: "",
+                  alertDoneLinkURL: URL(string: "about:blank")!)
   }
 }
