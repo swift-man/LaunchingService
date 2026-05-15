@@ -8,23 +8,32 @@
 import Dependencies
 
 final class RemoteConfigParser: Sendable {
-  func parse() throws -> Launching {
+  private let valueProvider: any RemoteConfigValueProviding
+
+  init(valueProvider: any RemoteConfigValueProviding = FirebaseRemoteConfigClient()) {
+    self.valueProvider = valueProvider
+  }
+
+  func parse() -> Launching {
     @Dependency(\.remoteConfigRegisterdKeys)
     var remoteConfigRegisterdKeys
 
-    let forceParser = RemoteConfigForceUpdateParser(keyStore: remoteConfigRegisterdKeys)
-    let noticeParser = RemoteConfigNoticeParser(keyStore: remoteConfigRegisterdKeys)
+    let forceParser = RemoteConfigForceUpdateParser(keyStore: remoteConfigRegisterdKeys,
+                                                    valueProvider: valueProvider)
+    let noticeParser = RemoteConfigNoticeParser(keyStore: remoteConfigRegisterdKeys,
+                                                valueProvider: valueProvider)
 
-    let forceUpdate = try forceParser.parseAppUpdateInfo()
+    let forceUpdate = forceParser.parseAppUpdateInfo()
 
-    let optionalParser = RemoteConfigOptionalUpdateParser(keyStore: remoteConfigRegisterdKeys)
+    let optionalParser = RemoteConfigOptionalUpdateParser(keyStore: remoteConfigRegisterdKeys,
+                                                          valueProvider: valueProvider)
     let optionalUpdate = optionalParser.parseAppUpdateInfo()
 
     let notice = noticeParser.parseNotice()
 
     return Launching(forceUpdate: forceUpdate,
                      optionalUpdate: optionalUpdate,
-                     blackListVersions: forceParser.parseBlackListVersions,
+                     blackListVersions: forceParser.parseBlackListVersions(),
                      notice: notice)
   }
 }
