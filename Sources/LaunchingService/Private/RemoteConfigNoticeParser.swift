@@ -35,22 +35,22 @@ final class RemoteConfigNoticeParser: Sendable {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertTitleKey)
-      .stringValue ?? ""
+      .stringValue
   }
   
   private var noticeAlertMessage: String {
     RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertMessageKey)
-      .stringValue ?? ""
+      .stringValue
   }
   
   private var noticeStartDate: Date? {
-    guard
-      let startDateString = RemoteConfig
-        .remoteConfig()
-        .configValue(forKey: keyStore.noticeKeys.startDateKey)
-        .stringValue
+    guard let startDateString = RemoteConfig
+      .remoteConfig()
+      .configValue(forKey: keyStore.noticeKeys.startDateKey)
+      .stringValue
+      .nilIfBlank
     else { return nil }
     
     let dateFormatter = ISO8601DateFormatter()
@@ -59,11 +59,11 @@ final class RemoteConfigNoticeParser: Sendable {
   }
   
   private var noticeEndDate: Date? {
-    guard
-      let endDateString = RemoteConfig
+    guard let endDateString = RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.endDateKey)
       .stringValue
+      .nilIfBlank
     else { return nil }
     
     let dateFormatter = ISO8601DateFormatter()
@@ -79,10 +79,12 @@ final class RemoteConfigNoticeParser: Sendable {
   }
   
   private var noticeAlertDoneURL: URL? {
-    let urlString = RemoteConfig
+    guard let urlString = RemoteConfig
       .remoteConfig()
       .configValue(forKey: keyStore.noticeKeys.alertDoneURLKey)
-      .stringValue ?? ""
+      .stringValue
+      .nilIfBlank
+    else { return nil }
     
     return URL(string: urlString)
   }

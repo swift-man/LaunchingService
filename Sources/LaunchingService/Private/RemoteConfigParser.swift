@@ -18,7 +18,7 @@ final class RemoteConfigParser: Sendable {
     let forceUpdate = try forceParser.parseAppUpdateInfo()
 
     let optionalParser = RemoteConfigOptionalUpdateParser(keyStore: remoteConfigRegisterdKeys)
-    let optionalUpdate = try optionalParser.parseAppUpdateInfo()
+    let optionalUpdate = optionalParser.parseAppUpdateInfo()
 
     let notice = noticeParser.parseNotice()
 

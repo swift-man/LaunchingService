@@ -5,8 +5,7 @@
 //  Created by SwiftMan on 2023/01/31.
 //
 
-import Firebase
-@preconcurrency import FirebaseRemoteConfig
+import FirebaseRemoteConfig
 import Dependencies
 
 /// 앱을 구성하기 전 외부로 부터 설정을 가져와 앱 상태를 반환하는 서비스 입니다.
@@ -22,30 +21,11 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
   /// - Throws: ``LaunchingServiceError``
   public func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
     let remoteConfig = RemoteConfig.remoteConfig()
-    return try await withCheckedThrowingContinuation { continuation in
-      remoteConfig.fetch(withExpirationDuration: 0) { _, error in
-        if let error {
-          continuation.resume(throwing: error)
-          return
-        }
+    _ = try await remoteConfig.fetch(withExpirationDuration: 0)
+    _ = try await remoteConfig.activate()
 
-        remoteConfig.activate { _, error in
-          if let error {
-            continuation.resume(throwing: error)
-            return
-          }
-
-          do {
-            let releaseVersion = try MainBundle().releaseVersion()
-            let launching = try RemoteConfigParser().parse()
-            let updateState = self.compare(releaseVersion: releaseVersion, launching: launching)
-
-            continuation.resume(returning: updateState)
-          } catch {
-            continuation.resume(throwing: error)
-          }
-        }
-      }
-    }
+    let releaseVersion = try MainBundle().releaseVersion()
+    let launching = try RemoteConfigParser().parse()
+    return compare(releaseVersion: releaseVersion, launching: launching)
   }
 }
