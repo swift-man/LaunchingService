@@ -19,7 +19,7 @@
 
 - Do not commit generated DocC output. `GeneratingDocumentationSite` writes the static site to `.build/docc-site/LaunchingService` and removes local `docs/` and `.doccarchive` outputs.
 - The `Deploy DocC` GitHub Action publishes the generated site to `swift-man/docs` under the `LaunchingService/` directory.
-- The workflow requires a `DOCS_DEPLOY_TOKEN` repository secret that can write contents to `swift-man/docs`.
+- The workflow requires a `DOCS_DEPLOY_KEY` repository secret. Register the matching public key as a writable deploy key in `swift-man/docs`.
 
 ## Pull Request Review Handling
 
