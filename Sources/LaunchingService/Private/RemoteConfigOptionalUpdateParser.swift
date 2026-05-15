@@ -38,7 +38,7 @@ final class RemoteConfigOptionalUpdateParser: Sendable {
     guard
       let urlString = RemoteConfig
         .remoteConfig()
-        .configValue(forKey: keyStore.forceUpdateKeys.alertDoneLinkURLKey)
+        .configValue(forKey: keyStore.optionalUpdateKeys.alertDoneLinkURLKey)
         .stringValue
     else {
       throw LaunchingServiceError.notFoundLinkURLKey

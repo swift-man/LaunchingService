@@ -1,6 +1,6 @@
 //
 //  BlackListTests.swift
-//  
+//
 //
 //  Created by SwiftMan on 2023/02/11.
 //
@@ -18,7 +18,7 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .forcedUpdateRequired(.mock))
   }
-  
+
   func testBlackListRequired_1() async throws {
     await tests(releaseVersion: "12.3",
                     forceVersion: "11.0.9",
@@ -27,7 +27,7 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .forcedUpdateRequired(.mock))
   }
-  
+
   func testBlackListRequired_2() async throws {
     await tests(releaseVersion: "1.0.10",
                     forceVersion: "0.0.9",
@@ -36,7 +36,7 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .forcedUpdateRequired(.mock))
   }
-  
+
   func testBlackListRequired_3() async throws {
     await tests(releaseVersion: "0.3.10",
                     forceVersion: "0.0.9",
@@ -45,7 +45,16 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .forcedUpdateRequired(.mock))
   }
-  
+
+  func testBlackListRequiredWithWhitespace() async throws {
+    await tests(releaseVersion: "1.2.0",
+                    forceVersion: "0.0.9",
+                    optionalUpdate: "0.0.5",
+                    blackListVersions: ["1.0.0", " 1.2.0 ", "2.0.0"],
+                    notice: nil,
+                    isEqualStatus: .forcedUpdateRequired(.mock))
+  }
+
   func testBlackListVersionValid_1() async throws {
     await tests(releaseVersion: "2.0.0",
                     forceVersion: "2.0.0",
@@ -54,7 +63,7 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .valid)
   }
-  
+
   func testBlackListVersionValid_2() async throws {
     await tests(releaseVersion: "1.0.0",
                     forceVersion: "0.0.9",
@@ -63,7 +72,7 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .valid)
   }
-  
+
   func testBlackListVersionValid_3() async throws {
     await tests(releaseVersion: "1.0.0",
                     forceVersion: "0.1",
@@ -72,7 +81,7 @@ final class BlackListTests: LaunchingServiceTests {
                     notice: nil,
                     isEqualStatus: .valid)
   }
-  
+
   func testBlackListVersionValid_4() async throws {
     await tests(releaseVersion: "1.0.0",
                     forceVersion: "0.1",

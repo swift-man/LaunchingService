@@ -11,7 +11,9 @@ final class BlackListVersionChecker: Sendable {
   func compare(releaseVersion: String,
                launching: Launching) -> AppUpdateStatus {
     
-    if launching.blackListVersions.contains(where: { $0.appVersionCompare(releaseVersion) == .orderedSame }) {
+    if launching.blackListVersions.contains(where: {
+      $0.trimmingCharacters(in: .whitespacesAndNewlines).appVersionCompare(releaseVersion) == .orderedSame
+    }) {
       let alert = UpdateAlert(title: launching.forceUpdate.alertTitle,
                               message: launching.forceUpdate.alertMessage,
                               alertDoneLinkURL: launching.forceUpdate.alertDoneLinkURL)

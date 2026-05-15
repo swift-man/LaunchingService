@@ -5,6 +5,7 @@
 //  Created by SwiftMan on 2023/02/06.
 //
 
+import Foundation
 import FirebaseRemoteConfig
 
 final class RemoteConfigForceUpdateParser: Sendable {
@@ -33,7 +34,8 @@ final class RemoteConfigForceUpdateParser: Sendable {
     
     return blackListVersionString
       .split(separator: ",")
-      .map { String($0) }
+      .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+      .filter { !$0.isEmpty }
   }
   
   private func parseForceDoneLinkURL() throws -> URL {
