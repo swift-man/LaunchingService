@@ -102,7 +102,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
   
   /// Firebase RemoteConfig 의 키 값을 커스텀으로 설정 합니다.
   /// - Parameters:
-  ///   - forceUpdateKey: 강제 업데이트 키
+  ///   - forceUpdateKeys: 강제 업데이트 키
   ///   - optionalUpdateKeys: 선택 업데이트 키
   ///   - noticeKeys: 공지 사항 키
   public init(forceUpdateKeys: ForceUpdateKeys = ForceUpdateKeys(),

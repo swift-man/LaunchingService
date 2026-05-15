@@ -1,4 +1,14 @@
-$(xcrun --find docc) process-archive \
-	transform-for-static-hosting ./LaunchingService.doccarchive \
-	--output-path ./docs \
-	--hosting-base-path LaunchingService
+#!/bin/bash
+
+set -euo pipefail
+
+rm -rf ./docs
+
+swift package --allow-writing-to-directory ./docs generate-documentation \
+  --target LaunchingService \
+  --disable-indexing \
+  --output-path ./docs \
+  --transform-for-static-hosting \
+  --hosting-base-path LaunchingService
+
+rm -rf ./LaunchingService.doccarchive

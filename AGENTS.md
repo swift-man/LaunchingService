@@ -18,6 +18,7 @@
 ```
 
 - Commit generated DocC changes under `docs/` when the command changes the site output.
+- Do not commit `.doccarchive` directories. `GeneratingDocumentationSite` removes `LaunchingService.doccarchive` after regenerating `docs/`.
 
 ## Pull Request Review Handling
 
