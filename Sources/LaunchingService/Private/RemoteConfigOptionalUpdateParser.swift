@@ -6,13 +6,15 @@
 //
 
 import Foundation
-import FirebaseRemoteConfig
 
 final class RemoteConfigOptionalUpdateParser: Sendable {
-  let keyStore: RemoteConfigRegisterdKeys
+  private let keyStore: RemoteConfigRegisterdKeys
+  private let valueProvider: any RemoteConfigValueProviding
   
-  init(keyStore: RemoteConfigRegisterdKeys) {
+  init(keyStore: RemoteConfigRegisterdKeys,
+       valueProvider: any RemoteConfigValueProviding = FirebaseRemoteConfigClient()) {
     self.keyStore = keyStore
+    self.valueProvider = valueProvider
   }
   
   func parseAppUpdateInfo() -> AppUpdateInfo {
@@ -30,18 +32,14 @@ final class RemoteConfigOptionalUpdateParser: Sendable {
   }
   
   private func parseOptionalUpdateAppVersion() -> String? {
-    return RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.optionalUpdateKeys.appVersionKey)
-      .stringValue
+    return valueProvider
+      .stringValue(forKey: keyStore.optionalUpdateKeys.appVersionKey)
       .nilIfBlank
   }
   
   private func parseOptionalDoneLinkURL() -> URL? {
-    guard let urlString = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.optionalUpdateKeys.alertDoneLinkURLKey)
-      .stringValue
+    guard let urlString = valueProvider
+      .stringValue(forKey: keyStore.optionalUpdateKeys.alertDoneLinkURLKey)
       .nilIfBlank
     else { return nil }
 
@@ -49,17 +47,11 @@ final class RemoteConfigOptionalUpdateParser: Sendable {
   }
   
   private var optionalUpdateTitle: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.optionalUpdateKeys.alertTitleKey)
-      .stringValue
+    valueProvider.stringValue(forKey: keyStore.optionalUpdateKeys.alertTitleKey)
   }
   
   private var optionalUpdateMessage: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.optionalUpdateKeys.alertMessageKey)
-      .stringValue
+    valueProvider.stringValue(forKey: keyStore.optionalUpdateKeys.alertMessageKey)
   }
 }
 

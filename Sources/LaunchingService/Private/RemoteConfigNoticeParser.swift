@@ -5,13 +5,23 @@
 //  Created by SwiftMan on 2023/02/10.
 //
 
-import FirebaseRemoteConfig
+import Foundation
 
 final class RemoteConfigNoticeParser: Sendable {
-  let keyStore: RemoteConfigRegisterdKeys
+  private static let dateFormatterLock = NSLock()
+  private static let dateFormatter: ISO8601DateFormatter = {
+    let dateFormatter = ISO8601DateFormatter()
+    dateFormatter.formatOptions = [.withInternetDateTime]
+    return dateFormatter
+  }()
+
+  private let keyStore: RemoteConfigRegisterdKeys
+  private let valueProvider: any RemoteConfigValueProviding
   
-  init(keyStore: RemoteConfigRegisterdKeys) {
+  init(keyStore: RemoteConfigRegisterdKeys,
+       valueProvider: any RemoteConfigValueProviding = FirebaseRemoteConfigClient()) {
     self.keyStore = keyStore
+    self.valueProvider = valueProvider
   }
   
   func parseNotice() -> NoticeInfo? {
@@ -32,60 +42,48 @@ final class RemoteConfigNoticeParser: Sendable {
   }
   
   private var noticeAlertTitle: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.noticeKeys.alertTitleKey)
-      .stringValue
+    valueProvider.stringValue(forKey: keyStore.noticeKeys.alertTitleKey)
   }
   
   private var noticeAlertMessage: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.noticeKeys.alertMessageKey)
-      .stringValue
+    valueProvider.stringValue(forKey: keyStore.noticeKeys.alertMessageKey)
   }
   
   private var noticeStartDate: Date? {
-    guard let startDateString = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.noticeKeys.startDateKey)
-      .stringValue
+    guard let startDateString = valueProvider
+      .stringValue(forKey: keyStore.noticeKeys.startDateKey)
       .nilIfBlank
     else { return nil }
     
-    let dateFormatter = ISO8601DateFormatter()
-    dateFormatter.formatOptions = [.withInternetDateTime]
-    return dateFormatter.date(from: startDateString)
+    return Self.date(from: startDateString)
   }
   
   private var noticeEndDate: Date? {
-    guard let endDateString = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.noticeKeys.endDateKey)
-      .stringValue
+    guard let endDateString = valueProvider
+      .stringValue(forKey: keyStore.noticeKeys.endDateKey)
       .nilIfBlank
     else { return nil }
     
-    let dateFormatter = ISO8601DateFormatter()
-    dateFormatter.formatOptions = [.withInternetDateTime]
-    return dateFormatter.date(from: endDateString)
+    return Self.date(from: endDateString)
   }
   
   private var noticeAlertDismissedTerminate: Bool {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.noticeKeys.alertDismissedTerminateKey)
-      .boolValue
+    valueProvider.boolValue(forKey: keyStore.noticeKeys.alertDismissedTerminateKey)
   }
   
   private var noticeAlertDoneURL: URL? {
-    guard let urlString = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.noticeKeys.alertDoneURLKey)
-      .stringValue
+    guard let urlString = valueProvider
+      .stringValue(forKey: keyStore.noticeKeys.alertDoneURLKey)
       .nilIfBlank
     else { return nil }
     
     return URL(string: urlString)
+  }
+
+  private static func date(from string: String) -> Date? {
+    dateFormatterLock.lock()
+    defer { dateFormatterLock.unlock() }
+
+    return dateFormatter.date(from: string)
   }
 }

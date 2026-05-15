@@ -6,27 +6,33 @@
 //
 
 import Foundation
-import FirebaseRemoteConfig
 
 final class RemoteConfigForceUpdateParser: Sendable {
-  let keyStore: RemoteConfigRegisterdKeys
+  private let keyStore: RemoteConfigRegisterdKeys
+  private let valueProvider: any RemoteConfigValueProviding
   
-  init(keyStore: RemoteConfigRegisterdKeys) {
+  init(keyStore: RemoteConfigRegisterdKeys,
+       valueProvider: any RemoteConfigValueProviding = FirebaseRemoteConfigClient()) {
     self.keyStore = keyStore
+    self.valueProvider = valueProvider
   }
   
-  func parseAppUpdateInfo() throws -> AppUpdateInfo {
-    return AppUpdateInfo(version: try parseForceUpdateAppVersionKey(),
+  func parseAppUpdateInfo() -> AppUpdateInfo {
+    guard let forceDoneLinkURL = parseForceDoneLinkURL() else {
+      return .inactiveForceUpdate
+    }
+
+    return AppUpdateInfo(version: parseForceUpdateAppVersion() ?? "",
                          alertTitle: forceUpdateTitle,
                          alertMessage: forceUpdateMessage,
-                         alertDoneLinkURL: try parseForceDoneLinkURL())
+                         alertDoneLinkURL: forceDoneLinkURL)
   }
   
-  var parseBlackListVersions: [String] {
-    let blackListVersionString = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.forceUpdateKeys.blackListVersionsKey)
-      .stringValue
+  func parseBlackListVersions() -> [String] {
+    guard parseForceDoneLinkURL() != nil else { return [] }
+
+    let blackListVersionString = valueProvider
+      .stringValue(forKey: keyStore.forceUpdateKeys.blackListVersionsKey)
     
     return blackListVersionString
       .split(separator: ",")
@@ -34,47 +40,35 @@ final class RemoteConfigForceUpdateParser: Sendable {
       .filter { !$0.isEmpty }
   }
   
-  private func parseForceDoneLinkURL() throws -> URL {
-    guard let urlString = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.forceUpdateKeys.alertDoneLinkURLKey)
-      .stringValue
+  private func parseForceDoneLinkURL() -> URL? {
+    guard let urlString = valueProvider
+      .stringValue(forKey: keyStore.forceUpdateKeys.alertDoneLinkURLKey)
       .nilIfBlank
-    else {
-      throw LaunchingServiceError.notFoundLinkURLKey
-    }
-    
-    guard let url = URL(string: urlString) else {
-      throw LaunchingServiceError.invalidLinkURLValue
-    }
-    
-    return url
+    else { return nil }
+
+    return URL(string: urlString)
   }
 
-  private func parseForceUpdateAppVersionKey() throws -> String {
-    guard let forceUpdateAppVersion = RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.forceUpdateKeys.appVersionKey)
-      .stringValue
+  private func parseForceUpdateAppVersion() -> String? {
+    valueProvider
+      .stringValue(forKey: keyStore.forceUpdateKeys.appVersionKey)
       .nilIfBlank
-    else {
-      throw LaunchingServiceError.notFoundForceUpdateAppVersionKey
-    }
-    
-    return forceUpdateAppVersion
   }
   
   private var forceUpdateTitle: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.forceUpdateKeys.alertTitleKey)
-      .stringValue
+    valueProvider.stringValue(forKey: keyStore.forceUpdateKeys.alertTitleKey)
   }
   
   private var forceUpdateMessage: String {
-    RemoteConfig
-      .remoteConfig()
-      .configValue(forKey: keyStore.forceUpdateKeys.alertMessageKey)
-      .stringValue
+    valueProvider.stringValue(forKey: keyStore.forceUpdateKeys.alertMessageKey)
+  }
+}
+
+private extension AppUpdateInfo {
+  static var inactiveForceUpdate: AppUpdateInfo {
+    AppUpdateInfo(version: "",
+                  alertTitle: "",
+                  alertMessage: "",
+                  alertDoneLinkURL: URL(string: "about:blank")!)
   }
 }
