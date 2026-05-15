@@ -7,6 +7,7 @@ review:
     - "Project.swift"
     - "Tuist/**/*.swift"
     - "**/Info.plist"
+    - "README.md"
 
   exclude:
     # dependency / build output
@@ -45,17 +46,16 @@ review:
     - "pnpm-lock.yaml"
 
     # docs / DocC output
-    - "README.md"
     - "CHANGELOG.md"
     - "docs/**"
     - "LaunchingService.doccarchive/**"
     - "**/*.docc/**"
     - "**/*.doccarchive/**"
-    - "**/*.md"
 
   always_review:
     - ".reviewbot.yml"
     - "AGENTS.md"
+    - "README.md"
     - "Package.swift"
     - "Project.swift"
     - "Tuist/**/*.swift"
