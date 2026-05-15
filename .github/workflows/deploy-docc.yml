@@ -1,0 +1,33 @@
+name: Deploy DocC
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-docc-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-docs:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build DocC
+        run: ./GeneratingDocumentationSite
+
+      - name: Deploy to swift-man/docs
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.DOCS_DEPLOY_TOKEN }}
+          external_repository: swift-man/docs
+          publish_branch: gh-pages
+          publish_dir: ./.build/docc-site/LaunchingService
+          destination_dir: LaunchingService
+          commit_message: "Deploy LaunchingService DocC from ${{ github.repository }}@${{ github.sha }}"

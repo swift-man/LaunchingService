@@ -11,14 +11,15 @@
 
 - Run `swift build` after code changes.
 - Run `swift test` for verification.
-- After a successful build, update the DocC static site by running:
+- After a successful build, verify DocC generation by running:
 
 ```bash
 ./GeneratingDocumentationSite
 ```
 
-- Commit generated DocC changes under `docs/` when the command changes the site output.
-- Do not commit `.doccarchive` directories. `GeneratingDocumentationSite` removes `LaunchingService.doccarchive` after regenerating `docs/`.
+- Do not commit generated DocC output. `GeneratingDocumentationSite` writes the static site to `.build/docc-site/LaunchingService` and removes local `docs/` and `.doccarchive` outputs.
+- The `Deploy DocC` GitHub Action publishes the generated site to `swift-man/docs` under the `LaunchingService/` directory.
+- The workflow requires a `DOCS_DEPLOY_TOKEN` repository secret that can write contents to `swift-man/docs`.
 
 ## Pull Request Review Handling
 

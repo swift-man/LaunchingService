@@ -2,13 +2,18 @@
 
 set -euo pipefail
 
-rm -rf ./docs
+OUTPUT_PATH="${DOCS_OUTPUT_PATH:-.build/docc-site/LaunchingService}"
+HOSTING_BASE_PATH="${DOCS_HOSTING_BASE_PATH:-docs/LaunchingService}"
 
-swift package --allow-writing-to-directory ./docs generate-documentation \
+rm -rf "$OUTPUT_PATH"
+mkdir -p "$(dirname "$OUTPUT_PATH")"
+
+swift package --allow-writing-to-directory "$OUTPUT_PATH" generate-documentation \
   --target LaunchingService \
   --disable-indexing \
-  --output-path ./docs \
+  --output-path "$OUTPUT_PATH" \
   --transform-for-static-hosting \
-  --hosting-base-path LaunchingService
+  --hosting-base-path "$HOSTING_BASE_PATH"
 
+rm -rf ./docs
 rm -rf ./LaunchingService.doccarchive
