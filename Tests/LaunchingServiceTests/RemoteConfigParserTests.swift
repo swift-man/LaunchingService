@@ -109,6 +109,27 @@ struct RemoteConfigParserTests {
     #expect(notice?.dateRange.contains(Date()) == true)
   }
 
+  @Test func remoteConfigParserContinuesToParseNoticeDatesWithCompactTimeZone() {
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+
+    let parser = RemoteConfigParser(
+      valueProvider: RemoteConfigClientMock(strings: [
+        "noticeAlertTitleKey": "Notice",
+        "noticeAlertMessageKey": "Scheduled maintenance",
+        "noticeStartDateKey": dateFormatter.string(from: Date().addingTimeInterval(-5000)),
+        "noticeEndDateKey": dateFormatter.string(from: Date().addingTimeInterval(5000))
+      ])
+    )
+
+    let notice = parser.parse().notice
+
+    #expect(notice?.title == "Notice")
+    #expect(notice?.dateRange.contains(Date()) == true)
+  }
+
   @Test func fetchAppUpdateStatusContinuesWithCachedConfigWhenFetchFails() async throws {
     let remoteConfigClient = RemoteConfigClientMock(
       strings: [
