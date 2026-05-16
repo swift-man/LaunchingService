@@ -74,9 +74,6 @@ final class RemoteConfigNoticeParser: Sendable {
   }
 
   private static func date(from string: String) -> Date? {
-    let dateFormatter = ISO8601DateFormatter()
-    dateFormatter.formatOptions = [.withInternetDateTime]
-
-    return dateFormatter.date(from: string)
+    try? Date.ISO8601FormatStyle().parse(string)
   }
 }

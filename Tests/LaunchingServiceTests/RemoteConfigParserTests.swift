@@ -82,6 +82,54 @@ struct RemoteConfigParserTests {
     #expect(launching.notice == nil)
   }
 
+  @Test func remoteConfigParserParsesNoticeDatesWithISO8601FormatStyle() {
+    let iso8601Style = Date.ISO8601FormatStyle()
+    let doneURL = URL(string: "https://example.com/notice")!
+    let parser = RemoteConfigParser(
+      valueProvider: RemoteConfigClientMock(
+        strings: [
+          "noticeAlertTitleKey": "Notice",
+          "noticeAlertMessageKey": "Scheduled maintenance",
+          "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(-5000)),
+          "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(5000)),
+          "noticeAlertDoneURLKey": doneURL.absoluteString
+        ],
+        bools: [
+          "noticeAlertDismissedTerminateKey": true
+        ]
+      )
+    )
+
+    let notice = parser.parse().notice
+
+    #expect(notice?.title == "Notice")
+    #expect(notice?.message == "Scheduled maintenance")
+    #expect(notice?.isAppTerminated == true)
+    #expect(notice?.doneURL == doneURL)
+    #expect(notice?.dateRange.contains(Date()) == true)
+  }
+
+  @Test func remoteConfigParserContinuesToParseNoticeDatesWithCompactTimeZone() {
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+
+    let parser = RemoteConfigParser(
+      valueProvider: RemoteConfigClientMock(strings: [
+        "noticeAlertTitleKey": "Notice",
+        "noticeAlertMessageKey": "Scheduled maintenance",
+        "noticeStartDateKey": dateFormatter.string(from: Date().addingTimeInterval(-5000)),
+        "noticeEndDateKey": dateFormatter.string(from: Date().addingTimeInterval(5000))
+      ])
+    )
+
+    let notice = parser.parse().notice
+
+    #expect(notice?.title == "Notice")
+    #expect(notice?.dateRange.contains(Date()) == true)
+  }
+
   @Test func fetchAppUpdateStatusContinuesWithCachedConfigWhenFetchFails() async throws {
     let remoteConfigClient = RemoteConfigClientMock(
       strings: [

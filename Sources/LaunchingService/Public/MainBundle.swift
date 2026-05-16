@@ -7,7 +7,7 @@
 
 import Foundation
 
-@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 public class MainBundle {
   public var releaseVersionNumber: String? {
     return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
