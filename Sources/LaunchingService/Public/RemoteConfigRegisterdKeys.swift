@@ -9,10 +9,10 @@ import Foundation
 import Dependencies
 
 /// Firebase RemoteConfig 의 alignment 를 설정 합니다.
-@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 public struct RemoteConfigRegisterdKeys: Sendable {
   
-  @available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+  @available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
   public struct ForceUpdateKeys: Sendable {
     let appVersionKey: String
     let alertTitleKey: String
@@ -40,7 +40,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
     }
   }
   
-  @available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+  @available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
   public struct OptionalUpdateKeys: Sendable {
     let appVersionKey: String
     let alertTitleKey: String
@@ -64,7 +64,7 @@ public struct RemoteConfigRegisterdKeys: Sendable {
     }
   }
   
-  @available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+  @available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
   public struct NoticeKeys: Sendable {
     let alertTitleKey: String
     let alertMessageKey: String
@@ -114,14 +114,14 @@ public struct RemoteConfigRegisterdKeys: Sendable {
   }
 }
 
-@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 extension RemoteConfigRegisterdKeys: TestDependencyKey {
   public static var testValue: RemoteConfigRegisterdKeys {
     RemoteConfigRegisterdKeys()
   }
 }
 
-@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 extension DependencyValues {
   public var remoteConfigRegisterdKeys: RemoteConfigRegisterdKeys {
     get { self[RemoteConfigRegisterdKeys.self] }

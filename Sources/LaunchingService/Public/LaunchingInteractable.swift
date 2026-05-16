@@ -7,7 +7,7 @@
 
 import Foundation
 
-@available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 public protocol LaunchingInteractable: AnyObject, Sendable {
   /// Firebase - RemoteConfig 의 값을 가져오고 계산 된 앱의 상태를 반환 합니다.
   ///
@@ -17,7 +17,7 @@ public protocol LaunchingInteractable: AnyObject, Sendable {
 }
 
 extension LaunchingInteractable {
-  @available(iOS 15.0, macOS 12, tvOS 13, watchOS 6.0, *)
+  @available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
   public func compare(releaseVersion: String, launching: Launching) -> AppUpdateStatus {
     var appStatus = AppUpdateStatusChecker().compare(releaseVersion: releaseVersion,
                                                      launching: launching)
