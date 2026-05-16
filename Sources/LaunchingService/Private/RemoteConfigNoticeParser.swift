@@ -8,13 +8,6 @@
 import Foundation
 
 final class RemoteConfigNoticeParser: Sendable {
-  private static let dateFormatterLock = NSLock()
-  private static let dateFormatter: ISO8601DateFormatter = {
-    let dateFormatter = ISO8601DateFormatter()
-    dateFormatter.formatOptions = [.withInternetDateTime]
-    return dateFormatter
-  }()
-
   private let keyStore: RemoteConfigRegisterdKeys
   private let valueProvider: any RemoteConfigValueProviding
   
@@ -81,8 +74,8 @@ final class RemoteConfigNoticeParser: Sendable {
   }
 
   private static func date(from string: String) -> Date? {
-    dateFormatterLock.lock()
-    defer { dateFormatterLock.unlock() }
+    let dateFormatter = ISO8601DateFormatter()
+    dateFormatter.formatOptions = [.withInternetDateTime]
 
     return dateFormatter.date(from: string)
   }
