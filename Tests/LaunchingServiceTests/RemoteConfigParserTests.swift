@@ -5,12 +5,14 @@
 //  Created by SwiftMan on 2023/02/10.
 //
 
-import XCTest
+import Foundation
+import Testing
 @testable import LaunchingService
 
+@Suite("RemoteConfigParser")
 @MainActor
-final class RemoteConfigParserTests: XCTestCase {
-  func testForceUpdateParserKeepsAlertInfoWhenForceVersionIsMissing() {
+struct RemoteConfigParserTests {
+  @Test func forceUpdateParserKeepsAlertInfoWhenForceVersionIsMissing() {
     let parser = RemoteConfigForceUpdateParser(
       keyStore: RemoteConfigRegisterdKeys(),
       valueProvider: RemoteConfigClientMock(strings: [
@@ -22,13 +24,13 @@ final class RemoteConfigParserTests: XCTestCase {
 
     let appUpdateInfo = parser.parseAppUpdateInfo()
 
-    XCTAssertEqual(appUpdateInfo.version, "")
-    XCTAssertEqual(appUpdateInfo.alertTitle, "Force update")
-    XCTAssertEqual(appUpdateInfo.alertMessage, "Please update")
-    XCTAssertEqual(appUpdateInfo.alertDoneLinkURL, URL(string: "https://example.com/force")!)
+    #expect(appUpdateInfo.version == "")
+    #expect(appUpdateInfo.alertTitle == "Force update")
+    #expect(appUpdateInfo.alertMessage == "Please update")
+    #expect(appUpdateInfo.alertDoneLinkURL == URL(string: "https://example.com/force")!)
   }
 
-  func testForceUpdateParserReturnsInactiveInfoWhenDoneURLIsMissing() {
+  @Test func forceUpdateParserReturnsInactiveInfoWhenDoneURLIsMissing() {
     let parser = RemoteConfigForceUpdateParser(
       keyStore: RemoteConfigRegisterdKeys(),
       valueProvider: RemoteConfigClientMock(strings: [
@@ -40,11 +42,11 @@ final class RemoteConfigParserTests: XCTestCase {
 
     let appUpdateInfo = parser.parseAppUpdateInfo()
 
-    XCTAssertEqual(appUpdateInfo.version, "")
-    XCTAssertEqual(appUpdateInfo.alertDoneLinkURL, URL(string: "about:blank")!)
+    #expect(appUpdateInfo.version == "")
+    #expect(appUpdateInfo.alertDoneLinkURL == URL(string: "about:blank")!)
   }
 
-  func testForceUpdateParserDisablesBlackListVersionsWhenDoneURLIsMissing() {
+  @Test func forceUpdateParserDisablesBlackListVersionsWhenDoneURLIsMissing() {
     let parser = RemoteConfigForceUpdateParser(
       keyStore: RemoteConfigRegisterdKeys(),
       valueProvider: RemoteConfigClientMock(strings: [
@@ -52,10 +54,10 @@ final class RemoteConfigParserTests: XCTestCase {
       ])
     )
 
-    XCTAssertEqual(parser.parseBlackListVersions(), [])
+    #expect(parser.parseBlackListVersions() == [])
   }
 
-  func testRemoteConfigParserUsesInjectedValuesWithoutFirebase() {
+  @Test func remoteConfigParserUsesInjectedValuesWithoutFirebase() {
     let parser = RemoteConfigParser(
       valueProvider: RemoteConfigClientMock(strings: [
         "forceUpdateAppVersionKey": "2.0.0",
@@ -72,15 +74,15 @@ final class RemoteConfigParserTests: XCTestCase {
 
     let launching = parser.parse()
 
-    XCTAssertEqual(launching.forceUpdate.version, "2.0.0")
-    XCTAssertEqual(launching.forceUpdate.alertTitle, "Force update")
-    XCTAssertEqual(launching.forceUpdate.alertDoneLinkURL, URL(string: "https://example.com/force")!)
-    XCTAssertEqual(launching.optionalUpdate.version, "1.5.0")
-    XCTAssertEqual(launching.blackListVersions, ["1.0.0", "1.1.0"])
-    XCTAssertNil(launching.notice)
+    #expect(launching.forceUpdate.version == "2.0.0")
+    #expect(launching.forceUpdate.alertTitle == "Force update")
+    #expect(launching.forceUpdate.alertDoneLinkURL == URL(string: "https://example.com/force")!)
+    #expect(launching.optionalUpdate.version == "1.5.0")
+    #expect(launching.blackListVersions == ["1.0.0", "1.1.0"])
+    #expect(launching.notice == nil)
   }
 
-  func testFetchAppUpdateStatusContinuesWithCachedConfigWhenFetchFails() async throws {
+  @Test func fetchAppUpdateStatusContinuesWithCachedConfigWhenFetchFails() async throws {
     let remoteConfigClient = RemoteConfigClientMock(
       strings: [
         "optionalUpdateAppVersionKey": "2.0.0",
@@ -97,9 +99,8 @@ final class RemoteConfigParserTests: XCTestCase {
 
     let status = try await service.fetchAppUpdateStatus()
 
-    XCTAssertEqual(
-      status,
-      .optionalUpdateRequired(
+    #expect(
+      status == .optionalUpdateRequired(
         UpdateAlert(title: "Optional update",
                     message: "A new version is available",
                     alertDoneLinkURL: URL(string: "https://example.com/optional")!)
@@ -107,7 +108,7 @@ final class RemoteConfigParserTests: XCTestCase {
     )
   }
 
-  func testFetchAppUpdateStatusDoesNotForceUpdateFromBlackListWhenForceURLIsMissing() async throws {
+  @Test func fetchAppUpdateStatusDoesNotForceUpdateFromBlackListWhenForceURLIsMissing() async throws {
     let remoteConfigClient = RemoteConfigClientMock(
       strings: [
         "blackListVersionsKey": "1.0.0"
@@ -120,7 +121,7 @@ final class RemoteConfigParserTests: XCTestCase {
 
     let status = try await service.fetchAppUpdateStatus()
 
-    XCTAssertEqual(status, .valid)
+    #expect(status == .valid)
   }
 }
 
