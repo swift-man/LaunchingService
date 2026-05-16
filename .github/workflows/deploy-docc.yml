@@ -27,7 +27,8 @@ jobs:
         with:
           deploy_key: ${{ secrets.DOCS_DEPLOY_KEY }}
           external_repository: swift-man/docs
-          publish_branch: gh-pages
+          publish_branch: main
           publish_dir: ./.build/docc-site/LaunchingService
           destination_dir: LaunchingService
+          keep_files: true
           commit_message: "Deploy LaunchingService DocC from ${{ github.repository }}@${{ github.sha }}"
