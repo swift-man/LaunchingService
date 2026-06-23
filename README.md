@@ -86,7 +86,10 @@ public enum LaunchingServiceError: Error {
 
 값이 없거나 공백인 경우의 동작은 키의 역할에 따라 다릅니다.
 
-- 버전, 필수 URL, 날짜 조건 값이 없으면 해당 기능은 비활성 상태로 판단됩니다.
+- Force update는 `forceUpdateAlertDoneLinkURLKey`와 `forceUpdateAppVersionKey`가 활성 조건입니다.
+- Blacklist force update는 `forceUpdateAlertDoneLinkURLKey`와 `blackListVersionsKey`가 활성 조건입니다.
+- Optional update는 `optionalUpdateAppVersionKey`와 `optionalUpdateAlertDoneLinkURLKey`가 활성 조건입니다.
+- Notice는 `noticeStartDateKey`와 `noticeEndDateKey`가 활성 조건입니다.
 - 타이틀과 메시지 문자열이 없으면 기능 트리거는 유지될 수 있고, 빈 문자열로 노출될 수 있습니다.
 - Bool 값이 없으면 `false`로 처리됩니다.
 
