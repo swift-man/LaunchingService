@@ -98,6 +98,8 @@ public enum LaunchingServiceError: Error {
 - 타이틀과 메시지 문자열이 없으면 기능 트리거는 유지될 수 있고, 빈 문자열로 노출될 수 있습니다.
 - `noticeAlertDismissedTerminateKey` 같은 Bool 설정이 없으면 `false`로 처리됩니다.
 
+상태 판정 우선순위는 Force update, Blacklist force update, Optional update, Notice, `AppUpdateStatus.valid` 순서입니다. 특정 기능의 활성 조건이 만족되지 않으면 다음 조건으로 넘어가며, 모든 기능이 비활성 상태일 때 `valid`가 반환됩니다.
+
 타이틀과 메시지는 파서 기준으로는 생략할 수 있지만, 사용자에게 보여지는 얼럿 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
 ### Required Values by Feature
@@ -193,6 +195,7 @@ If the app is a blacklisted version, it is force updated. `blackListVersionsKey`
 ## Notice
 ### DateFormat
 Notice dates are parsed with `Date.ISO8601FormatStyle()`. The notice is shown only when both dates are valid, `noticeStartDateKey` is earlier than `noticeEndDateKey`, and the current time is inside that range.
+UTC `Z` strings are recommended for consistent operations, and ISO8601 strings with timezone offsets are accepted when `Date.ISO8601FormatStyle()` can parse them.
 
 ```
 2026-06-24T00:00:00Z
