@@ -90,7 +90,9 @@ public enum LaunchingServiceError: Error {
 - Blacklist force update는 `forceUpdateAlertDoneLinkURLKey`와 `blackListVersionsKey`가 활성 조건입니다.
 - Optional update는 `optionalUpdateAppVersionKey`와 `optionalUpdateAlertDoneLinkURLKey`가 활성 조건입니다.
 - Notice는 `noticeStartDateKey`와 `noticeEndDateKey`가 활성 조건입니다.
-- 활성 조건 값 중 URL 또는 날짜가 파싱되지 않으면 해당 기능은 비활성 상태로 판단됩니다.
+- Force update, Blacklist force update, Optional update의 필수 URL이 파싱되지 않으면 해당 기능은 비활성 상태로 판단됩니다.
+- Notice의 시작일 또는 종료일이 ISO8601 날짜로 파싱되지 않으면 Notice는 비활성 상태로 판단됩니다.
+- Notice의 `noticeAlertDoneURLKey`는 예외적으로 활성 조건이 아니며, 파싱되지 않아도 Notice는 계속 노출될 수 있고 `doneURL`만 제공되지 않습니다.
 - 타이틀과 메시지 문자열이 없으면 기능 트리거는 유지될 수 있고, 빈 문자열로 노출될 수 있습니다.
 - `noticeAlertDismissedTerminateKey` 같은 Bool 설정이 없으면 `false`로 처리됩니다.
 
@@ -106,9 +108,7 @@ public enum LaunchingServiceError: Error {
 
 `forceUpdateAlertDoneLinkURLKey`는 강제 업데이트 버전 체크와 블랙리스트 체크에 공통으로 필요합니다. 이 URL 값이 없거나 유효하지 않으면 `forceUpdateAppVersionKey`, `blackListVersionsKey` 값이 있어도 강제 업데이트와 블랙리스트 체크가 비활성화됩니다.
 
-`noticeAlertDoneURLKey`는 공지 노출 조건이 아닙니다. 이 값이 없거나 URL로 파싱되지 않으면 공지는 계속 노출될 수 있고, `doneURL`만 제공되지 않습니다.
-
-`LaunchingService`는 이 경우 UI 버튼 표시 여부를 결정하지 않고 `NoticeAlert.doneURL`에 `nil`을 전달합니다. 버튼 숨김, 비활성화, 링크 없는 확인 동작은 presentation layer에서 결정합니다.
+`LaunchingService`는 `noticeAlertDoneURLKey`가 없거나 파싱되지 않은 경우 UI 버튼 표시 여부를 결정하지 않고 `NoticeAlert.doneURL`에 `nil`을 전달합니다. 버튼 숨김, 비활성화, 링크 없는 확인 동작은 presentation layer에서 결정합니다.
 
 ### Default Key Names
 | Group | Key | Value type |
