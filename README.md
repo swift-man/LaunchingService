@@ -96,6 +96,8 @@ public enum LaunchingServiceError: Error {
 
 `forceUpdateAlertDoneLinkURLKey`는 강제 업데이트 버전 체크와 블랙리스트 체크에 공통으로 필요합니다. 이 URL 값이 없거나 유효하지 않으면 `forceUpdateAppVersionKey`, `blackListVersionsKey` 값이 있어도 강제 업데이트와 블랙리스트 체크가 비활성화됩니다.
 
+`noticeAlertDoneURLKey`는 공지 노출 조건이 아닙니다. 이 값이 없거나 URL로 파싱되지 않으면 공지는 계속 노출될 수 있고, `doneURL`만 제공되지 않습니다.
+
 ### Default Key Names
 | Group | Key | Value type |
 | --- | --- | --- |
