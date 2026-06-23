@@ -90,18 +90,19 @@ public enum LaunchingServiceError: Error {
 - Blacklist force update는 `forceUpdateAlertDoneLinkURLKey`와 `blackListVersionsKey`가 활성 조건입니다.
 - Optional update는 `optionalUpdateAppVersionKey`와 `optionalUpdateAlertDoneLinkURLKey`가 활성 조건입니다.
 - Notice는 `noticeStartDateKey`와 `noticeEndDateKey`가 활성 조건입니다.
+- 활성 조건 값 중 URL 또는 날짜가 파싱되지 않으면 해당 기능은 비활성 상태로 판단됩니다.
 - 타이틀과 메시지 문자열이 없으면 기능 트리거는 유지될 수 있고, 빈 문자열로 노출될 수 있습니다.
 - Bool 값이 없으면 `false`로 처리됩니다.
 
 타이틀과 메시지는 파서 기준으로는 생략할 수 있지만, 사용자에게 보여지는 얼럿 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
 ### Required Values by Feature
-| Feature | Required values | Recommended / optional values |
-| --- | --- | --- |
-| Force update | `forceUpdateAlertDoneLinkURLKey`: 유효한 URL<br>`forceUpdateAppVersionKey`: 현재 앱 버전보다 높은 강제 업데이트 버전 | `forceUpdateAlertTitleKey`<br>`forceUpdateAlertMessageKey` |
-| Blacklist force update | `forceUpdateAlertDoneLinkURLKey`: 유효한 URL<br>`blackListVersionsKey`: 현재 앱 버전을 포함한 comma-separated 버전 목록 | `forceUpdateAlertTitleKey`<br>`forceUpdateAlertMessageKey` |
-| Optional update | `optionalUpdateAppVersionKey`: 현재 앱 버전보다 높은 선택 업데이트 버전<br>`optionalUpdateAlertDoneLinkURLKey`: 유효한 URL | `optionalUpdateAlertTitleKey`<br>`optionalUpdateAlertMessageKey` |
-| Notice | `noticeStartDateKey`: ISO8601 시작일<br>`noticeEndDateKey`: ISO8601 종료일<br>시작일이 종료일보다 빠르고, 현재 시간이 기간 안에 있어야 함 | `noticeAlertTitleKey`<br>`noticeAlertMessageKey`<br>`noticeAlertDoneURLKey`<br>`noticeAlertDismissedTerminateKey` |
+| Feature | Required values | Activation condition | Recommended / optional values |
+| --- | --- | --- | --- |
+| Force update | `forceUpdateAlertDoneLinkURLKey`: 유효한 URL<br>`forceUpdateAppVersionKey`: 강제 업데이트 버전 | `forceUpdateAppVersionKey`가 현재 앱 버전보다 높음 | `forceUpdateAlertTitleKey`<br>`forceUpdateAlertMessageKey` |
+| Blacklist force update | `forceUpdateAlertDoneLinkURLKey`: 유효한 URL<br>`blackListVersionsKey`: comma-separated 버전 목록 | `blackListVersionsKey`가 현재 앱 버전을 포함함 | `forceUpdateAlertTitleKey`<br>`forceUpdateAlertMessageKey` |
+| Optional update | `optionalUpdateAppVersionKey`: 선택 업데이트 버전<br>`optionalUpdateAlertDoneLinkURLKey`: 유효한 URL | `optionalUpdateAppVersionKey`가 현재 앱 버전보다 높음 | `optionalUpdateAlertTitleKey`<br>`optionalUpdateAlertMessageKey` |
+| Notice | `noticeStartDateKey`: ISO8601 시작일<br>`noticeEndDateKey`: ISO8601 종료일 | 시작일이 종료일보다 빠르고, 현재 시간이 기간 안에 있음 | `noticeAlertTitleKey`<br>`noticeAlertMessageKey`<br>`noticeAlertDoneURLKey`<br>`noticeAlertDismissedTerminateKey` |
 
 `forceUpdateAlertDoneLinkURLKey`는 강제 업데이트 버전 체크와 블랙리스트 체크에 공통으로 필요합니다. 이 URL 값이 없거나 유효하지 않으면 `forceUpdateAppVersionKey`, `blackListVersionsKey` 값이 있어도 강제 업데이트와 블랙리스트 체크가 비활성화됩니다.
 
@@ -124,7 +125,7 @@ public enum LaunchingServiceError: Error {
 | Notice | `noticeStartDateKey` | String ISO8601 date |
 | Notice | `noticeEndDateKey` | String ISO8601 date |
 | Notice | `noticeAlertDoneURLKey` | String URL |
-| Notice | `noticeAlertDismissedTerminateKey` | Bool |
+| Notice | `noticeAlertDismissedTerminateKey` | Bool, default `false` |
 
 ### Minimal Remote Config Examples
 Force update:
