@@ -84,6 +84,8 @@ public enum LaunchingServiceError: Error {
 ## Firebase Remote Config Values
 `RemoteConfigRegisterdKeys`는 Firebase Remote Config에서 읽을 키 이름을 정의합니다. 기본 initializer를 사용한다면 Firebase Remote Config에 아래 기본 키 이름으로 값을 등록해야 합니다.
 
+`fetchAppUpdateStatus()`는 Firebase Remote Config의 `fetchAndActivate()`가 실패해도 현재 활성값 또는 기본값을 기준으로 앱 상태 파싱을 계속 진행합니다.
+
 값이 없거나 공백인 경우의 동작은 키의 역할에 따라 다릅니다.
 
 - Force update는 `forceUpdateAlertDoneLinkURLKey`와 `forceUpdateAppVersionKey`가 활성 조건입니다.
