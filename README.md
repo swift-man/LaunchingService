@@ -196,8 +196,8 @@ If the app is a blacklisted version, it is force updated. `blackListVersionsKey`
 
 ## Notice
 ### DateFormat
-Notice dates are parsed with `Date.ISO8601FormatStyle()`. The notice is shown only when both dates are valid, `noticeStartDateKey` is earlier than `noticeEndDateKey`, and the current time is inside that range.
-UTC `Z` strings are recommended for consistent operations, and ISO8601 strings with timezone offsets are accepted when `Date.ISO8601FormatStyle()` can parse them.
+공지 날짜는 `Date.ISO8601FormatStyle()`로 파싱됩니다. 두 날짜가 모두 유효하고, `noticeStartDateKey`가 `noticeEndDateKey`보다 빠르며, 현재 시간이 기간 안에 있을 때만 공지가 노출됩니다.
+운영 일관성을 위해 UTC `Z` 문자열을 권장합니다. `Date.ISO8601FormatStyle()`로 파싱 가능한 timezone offset이 포함된 ISO8601 문자열도 사용할 수 있습니다.
 
 ```
 2026-06-24T00:00:00Z
