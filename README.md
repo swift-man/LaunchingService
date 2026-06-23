@@ -84,7 +84,11 @@ public enum LaunchingServiceError: Error {
 ## Firebase Remote Config Values
 `RemoteConfigRegisterdKeys`는 Firebase Remote Config에서 읽을 키 이름을 정의합니다. 기본 initializer를 사용한다면 Firebase Remote Config에 아래 기본 키 이름으로 값을 등록해야 합니다.
 
-버전, URL, 날짜처럼 기능 활성화 조건에 쓰이는 문자열 값이 없거나 공백이면 해당 기능은 비활성 상태로 판단됩니다. 반면 타이틀과 메시지 문자열이 없으면 기능 트리거는 유지될 수 있고, 빈 문자열로 노출될 수 있습니다. Bool 값이 없으면 `false`로 처리됩니다.
+값이 없거나 공백인 경우의 동작은 키의 역할에 따라 다릅니다.
+
+- 버전, 필수 URL, 날짜 조건 값이 없으면 해당 기능은 비활성 상태로 판단됩니다.
+- 타이틀과 메시지 문자열이 없으면 기능 트리거는 유지될 수 있고, 빈 문자열로 노출될 수 있습니다.
+- Bool 값이 없으면 `false`로 처리됩니다.
 
 타이틀과 메시지는 파서 기준으로는 생략할 수 있지만, 사용자에게 보여지는 얼럿 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
