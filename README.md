@@ -183,6 +183,7 @@ noticeAlertDismissedTerminateKey = false
 ```swift
 import Dependencies
 
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 extension RemoteConfigRegisterdKeys: DependencyKey {
   public static var liveValue = RemoteConfigRegisterdKeys()
 }
@@ -193,6 +194,7 @@ Remote Config 키 이름을 앱별로 바꾸려면 각 key group에 실제 문�
 ```swift
 import Dependencies
 
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
 extension RemoteConfigRegisterdKeys: DependencyKey {
   public static var liveValue = RemoteConfigRegisterdKeys(
     forceUpdateKeys: .init(
@@ -220,15 +222,15 @@ extension RemoteConfigRegisterdKeys: DependencyKey {
 }
 ```
 
-## BlackList
-If the app is a blacklisted version, it is force updated. `blackListVersionsKey` is a comma-separated string, and `forceUpdateAlertDoneLinkURLKey` must also be set to a URL value.
+## 블랙리스트 업데이트
+현재 앱 버전이 블랙리스트 버전에 포함되면 강제 업데이트 상태로 판단됩니다. `blackListVersionsKey`는 comma-separated 버전 문자열이며, `forceUpdateAlertDoneLinkURLKey`도 유효한 URL 값으로 설정되어 있어야 합니다.
 
 ```
 1.0.0, 1.2.0, 2.0.0
 ```
 
-## Notice
-### DateFormat
+## 공지사항
+### 날짜 형식
 공지 날짜는 `Date.ISO8601FormatStyle()`로 파싱됩니다. 두 날짜가 모두 유효하고, `noticeStartDateKey`가 `noticeEndDateKey`보다 빠르며, 현재 시간이 기간 안에 있을 때만 공지가 노출됩니다.
 운영 일관성을 위해 UTC `Z` 문자열을 권장합니다. `Date.ISO8601FormatStyle()`로 파싱 가능한 timezone offset이 포함된 ISO8601 문자열도 사용할 수 있습니다.
 
@@ -242,26 +244,26 @@ If the app is a blacklisted version, it is force updated. `blackListVersionsKey`
 * noticeEndDateKey
   * value: String (ex: 2026-06-25T00:00:00Z) // UTC
  
-### Title, Message
+### 제목, 메시지
 * noticeAlertTitleKey
   * value: String
 * noticeAlertMessageKey
   * value: String
 
-### URL Landing
+### 공지 링크
 * noticeAlertDoneURLKey
   * value: String (ex: https://google.com)
 
-### App Terminate
+### 앱 종료
 * noticeAlertDismissedTerminateKey
   * value: Bool
 
-## Installation
+## 설치
 ### Swift Package Manager
 
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. 
+[Swift Package Manager](https://swift.org/package-manager/)는 Swift 코드 배포를 자동화하는 도구이며 `swift` 컴파일러에 통합되어 있습니다.
 
-Once you have your Swift package set up, adding LaunchingService as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+Swift package 설정이 끝났다면 `Package.swift`의 `dependencies` 값에 LaunchingService를 추가해 사용할 수 있습니다.
 
 ```swift
 dependencies: [
