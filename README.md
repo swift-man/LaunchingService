@@ -100,6 +100,8 @@ public enum LaunchingServiceError: Error {
 
 상태 판정 우선순위는 Force update, Blacklist force update, Optional update, Notice, `AppUpdateStatus.valid` 순서입니다. 특정 기능의 활성 조건이 만족되지 않으면 다음 조건으로 넘어가며, 모든 기능이 비활성 상태일 때 `valid`가 반환됩니다.
 
+Force update와 Optional update의 버전 비교는 단순 문자열 비교가 아니라 `String.compare(_:options: .numeric)` 기반입니다. 버전 component 수가 다르면 부족한 쪽에 `0`을 채운 뒤 비교하므로 `1.10.0`은 `1.2.0`보다 높은 버전으로 판단됩니다.
+
 타이틀과 메시지는 파서 기준으로는 생략할 수 있지만, 사용자에게 보여지는 얼럿 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
 ### Required Values by Feature
