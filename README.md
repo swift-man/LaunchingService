@@ -180,9 +180,9 @@ import Dependencies
 
 extension RemoteConfigRegisterdKeys: DependencyKey {
   public static var liveValue = RemoteConfigRegisterdKeys(
-    forceUpdateKeys: #...#
-    optionalUpdateKeys: #...#
-    noticeKeys : #...#
+    forceUpdateKeys: #...#,
+    optionalUpdateKeys: #...#,
+    noticeKeys: #...#
   )
 }
 ```
