@@ -175,14 +175,45 @@ noticeAlertDismissedTerminateKey = false
 ```
 
 ### Your Custom Remote Config Keys
+
+기본 키 이름을 그대로 사용한다면 별도 값 없이 기본 initializer를 사용할 수 있습니다.
+
+```swift
+import Dependencies
+
+extension RemoteConfigRegisterdKeys: DependencyKey {
+  public static var liveValue = RemoteConfigRegisterdKeys()
+}
+```
+
+Remote Config 키 이름을 앱별로 바꾸려면 각 key group에 실제 문자열 키를 전달합니다.
+
 ```swift
 import Dependencies
 
 extension RemoteConfigRegisterdKeys: DependencyKey {
   public static var liveValue = RemoteConfigRegisterdKeys(
-    forceUpdateKeys: #...#,
-    optionalUpdateKeys: #...#,
-    noticeKeys: #...#
+    forceUpdateKeys: .init(
+      appVersionKey: "launching_force_update_version",
+      alertTitleKey: "launching_force_update_title",
+      alertMessageKey: "launching_force_update_message",
+      alertDoneLinkURLKey: "launching_force_update_done_url",
+      blackListVersionsKey: "launching_blacklist_versions"
+    ),
+    optionalUpdateKeys: .init(
+      appVersionKey: "launching_optional_update_version",
+      alertTitleKey: "launching_optional_update_title",
+      alertMessageKey: "launching_optional_update_message",
+      alertDoneLinkURLKey: "launching_optional_update_done_url"
+    ),
+    noticeKeys: .init(
+      alertTitleKey: "launching_notice_title",
+      alertMessageKey: "launching_notice_message",
+      startDateKey: "launching_notice_start_date",
+      endDateKey: "launching_notice_end_date",
+      alertDoneURLKey: "launching_notice_done_url",
+      alertDismissedTerminateKey: "launching_notice_dismissed_terminate"
+    )
   )
 }
 ```
