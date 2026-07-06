@@ -118,6 +118,24 @@ Force update와 Optional update의 버전 비교는 단순 문자열 비교가 �
 
 `LaunchingService`는 `noticeAlertDoneURLKey`가 없거나 파싱되지 않은 경우 UI 버튼 표시 여부를 결정하지 않고 `NoticeAlert.doneURL`에 `nil`을 전달합니다. 버튼 숨김, 비활성화, 링크 없는 확인 동작은 presentation layer에서 결정합니다.
 
+### Remote Config Edge Cases
+| Case | Result |
+| --- | --- |
+| `fetchAndActivate()` 실패 | fetch 실패만으로는 종료하지 않고 현재 활성값 또는 기본값으로 상태 파싱을 계속합니다. 앱 버전 조회 실패는 여전히 throw될 수 있습니다. |
+| `forceUpdateAppVersionKey`가 없거나 공백 | Force update 버전 비교를 건너뛰고 Blacklist force update를 평가합니다. |
+| `forceUpdateAlertDoneLinkURLKey`가 없거나 URL로 파싱되지 않음 | Force update와 Blacklist force update를 모두 비활성으로 판단하고 Optional update를 평가합니다. |
+| `blackListVersionsKey`가 없거나 공백 | Blacklist force update를 건너뛰고 Optional update를 평가합니다. |
+| `blackListVersionsKey`가 현재 앱 버전을 포함하지 않음 | Blacklist force update를 건너뛰고 Optional update를 평가합니다. |
+| `optionalUpdateAppVersionKey`가 없거나 공백 | Optional update를 비활성으로 판단하고 Notice를 평가합니다. |
+| `optionalUpdateAlertDoneLinkURLKey`가 없거나 URL로 파싱되지 않음 | Optional update를 비활성으로 판단하고 Notice를 평가합니다. |
+| `noticeStartDateKey` 또는 `noticeEndDateKey`가 없거나 ISO8601 날짜로 파싱되지 않음 | Notice를 비활성으로 판단합니다. 앞선 상태도 모두 비활성이면 `AppUpdateStatus.valid`를 반환합니다. |
+| Notice 시작일이 종료일보다 같거나 늦음 | Notice를 비활성으로 판단합니다. 앞선 상태도 모두 비활성이면 `AppUpdateStatus.valid`를 반환합니다. |
+| 현재 시간이 Notice 기간 밖에 있음 | Notice를 비활성으로 판단합니다. 앞선 상태도 모두 비활성이면 `AppUpdateStatus.valid`를 반환합니다. |
+| `noticeAlertDoneURLKey`가 없거나 URL로 파싱되지 않음 | Notice 활성 조건에는 영향을 주지 않고 `NoticeAlert.doneURL`만 `nil`로 전달합니다. |
+| 타이틀 또는 메시지가 없거나 공백 | 상태 활성 조건에는 영향을 주지 않습니다. Remote Config에서 읽은 문자열이 그대로 전달될 수 있으므로 실제 서비스에서는 함께 설정하는 것을 권장합니다. |
+| `noticeAlertDismissedTerminateKey`가 없음 | `false`로 처리됩니다. |
+| 모든 기능이 비활성 | `AppUpdateStatus.valid`를 반환합니다. |
+
 ### Default Key Names
 | Group | Key | Value type |
 | --- | --- | --- |
