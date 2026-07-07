@@ -10,6 +10,7 @@
 - `fetchAndActivate()` 실패 시 기존 활성값 또는 기본값으로 파싱을 계속하는 fallback 동작을 문서화했습니다.
 - Force update, Blacklist force update, Optional update, Notice의 상태 판정 우선순위와 URL/날짜 파싱 실패 동작을 명확히 했습니다.
 - Remote Config 경계 케이스별 결과 표를 추가해 값 누락, 파싱 실패, 기간 불일치 시 다음 상태 판정 흐름을 빠르게 확인할 수 있게 했습니다.
+- `LaunchingServiceError` 문서를 현재 구현 기준으로 정리해 Remote Config 값 문제는 throw가 아니라 기능 비활성으로 처리된다는 점을 명확히 했습니다.
 - DocC 첫 화면에 기본 사용법, Remote Config 계약, 상태 판정 흐름, 주요 API 탐색 섹션을 보강했습니다.
 - 커스텀 Remote Config key 예제를 복사 가능한 Swift 코드 형태로 정리하고, 버전 비교 방식과 availability 조건을 문서화했습니다.
 

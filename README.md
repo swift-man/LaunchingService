@@ -70,6 +70,10 @@ public enum AppUpdateStatus: Equatable, Sendable {
 ```
 
 ### API Error
+`fetchAppUpdateStatus()`는 앱 버전 조회에 실패한 경우 오류를 throw할 수 있습니다. 기본 구현에서는 `Bundle.main`의 `CFBundleShortVersionString`이 없거나 비어 있을 때 `invalidMainBundleReleaseVersionNumber`가 발생합니다.
+
+Firebase Remote Config의 fetch 실패는 현재 활성값 또는 기본값으로 fallback하며, Remote Config 값 누락, URL 파싱 실패, 날짜 파싱 실패는 오류가 아니라 해당 기능 비활성으로 처리됩니다. 아래 enum의 Remote Config 관련 case는 public API 호환성을 위해 유지되지만, 현재 Remote Config 파서 흐름에서는 throw되지 않습니다.
+
 ```swift
 public enum LaunchingServiceError: Error {
   case invalidLinkURLValue
@@ -100,7 +104,7 @@ public enum LaunchingServiceError: Error {
 
 상태 판정 우선순위는 Force update, Blacklist force update, Optional update, Notice, `AppUpdateStatus.valid` 순서입니다. 특정 기능의 활성 조건이 만족되지 않으면 다음 조건으로 넘어가며, 모든 기능이 비활성 상태일 때 `valid`가 반환됩니다.
 
-Force update와 Optional update의 버전 비교는 단순 문자열 비교가 아니라 `String.compare(_:options: .numeric)` 기반입니다. 버전 component 수가 다르면 부족한 쪽에 `0`을 채운 뒤 비교하므로 `1.10.0`은 `1.2.0`보다 높은 버전으로 판단됩니다.
+Force update와 Optional update의 버전 비교는 단순 문자열 비교가 아니라 `String.compare(_:options: .numeric)` 기반입니다. 버전 component 수가 다르면 부족한 쪽에 `0`을 채운 뒤 비교합니다. 예를 들어 `1.10`과 `1.2.0`을 비교할 때 `1.10`은 `1.10.0`처럼 보정되고, 숫자 비교 기준으로 `1.10.0`은 `1.2.0`보다 높은 버전으로 판단됩니다.
 
 타이틀과 메시지는 파서 기준으로는 생략할 수 있지만, 사용자에게 보여지는 얼럿 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
