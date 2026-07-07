@@ -75,7 +75,8 @@ public enum AppUpdateStatus: Equatable, Sendable {
 Firebase Remote Config의 fetch 실패는 현재 활성값 또는 기본값으로 fallback하며, Remote Config 값 누락, URL 파싱 실패, 날짜 파싱 실패는 오류가 아니라 해당 기능 비활성으로 처리됩니다. 아래 enum의 Remote Config 관련 case와 `unknown`은 public API 호환성을 위해 유지되지만, 현재 Remote Config 파서 흐름에서는 throw되지 않으므로 deprecated 처리되어 있습니다.
 
 ```swift
-public enum LaunchingServiceError: Error {
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
+public enum LaunchingServiceError: Error, Equatable, Sendable {
   @available(*, deprecated, message: "Remote Config URL parsing failures are treated as inactive feature states.")
   case invalidLinkURLValue
 
