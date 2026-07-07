@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-07-08
+
 ### 변경
 
 - 현재 구현에서 throw되지 않는 `LaunchingServiceError` legacy case에 deprecation 안내를 추가했습니다.
@@ -49,7 +51,8 @@
 
 - DocC 주석 연결과 문서 호스팅 설정을 정리했습니다.
 
-[Unreleased]: https://github.com/swift-man/LaunchingService/compare/0.9.2...HEAD
+[Unreleased]: https://github.com/swift-man/LaunchingService/compare/0.9.3...HEAD
+[0.9.3]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.3
 [0.9.2]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.2
 [0.9.1]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.1
 [0.9.0]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.0
