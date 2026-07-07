@@ -72,15 +72,25 @@ public enum AppUpdateStatus: Equatable, Sendable {
 ### API Error
 `fetchAppUpdateStatus()`는 앱 버전 조회에 실패한 경우 오류를 throw할 수 있습니다. 기본 구현에서는 `Bundle.main`의 `CFBundleShortVersionString`이 없거나 비어 있을 때 `invalidMainBundleReleaseVersionNumber`가 발생합니다.
 
-Firebase Remote Config의 fetch 실패는 현재 활성값 또는 기본값으로 fallback하며, Remote Config 값 누락, URL 파싱 실패, 날짜 파싱 실패는 오류가 아니라 해당 기능 비활성으로 처리됩니다. 아래 enum의 Remote Config 관련 case는 public API 호환성을 위해 유지되지만, 현재 Remote Config 파서 흐름에서는 throw되지 않습니다.
+Firebase Remote Config의 fetch 실패는 현재 활성값 또는 기본값으로 fallback하며, Remote Config 값 누락, URL 파싱 실패, 날짜 파싱 실패는 오류가 아니라 해당 기능 비활성으로 처리됩니다. 아래 enum의 Remote Config 관련 case와 `unknown`은 public API 호환성을 위해 유지되지만, 현재 Remote Config 파서 흐름에서는 throw되지 않으므로 deprecated 처리되어 있습니다.
 
 ```swift
 public enum LaunchingServiceError: Error {
+  @available(*, deprecated, message: "Remote Config URL parsing failures are treated as inactive feature states.")
   case invalidLinkURLValue
+
+  @available(*, deprecated, message: "Missing Remote Config link URL keys are treated as inactive feature states.")
   case notFoundLinkURLKey
+
+  @available(*, deprecated, message: "Missing force update version keys are treated as inactive feature states.")
   case notFoundForceUpdateAppVersionKey
+
+  @available(*, deprecated, message: "Missing optional update version keys are treated as inactive feature states.")
   case notFoundOptionalUpdateAppVersionKey
+
   case invalidMainBundleReleaseVersionNumber
+
+  @available(*, deprecated, message: "The current LaunchingService implementation does not throw unknown errors.")
   case unknown
 }
 ```

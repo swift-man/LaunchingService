@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### 변경
+
+- 현재 구현에서 throw되지 않는 `LaunchingServiceError` legacy case에 deprecation 안내를 추가했습니다.
+
 ### 문서
 
 - `RemoteConfigRegisterdKeys`의 필수 Firebase Remote Config 값과 기능별 활성 조건을 README에 정리했습니다.
