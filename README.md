@@ -70,13 +70,28 @@ public enum AppUpdateStatus: Equatable, Sendable {
 ```
 
 ### API Error
+`fetchAppUpdateStatus()`는 앱 버전 조회에 실패한 경우 오류를 throw할 수 있습니다. 기본 구현에서는 `Bundle.main`의 `CFBundleShortVersionString`이 없거나 비어 있을 때 `invalidMainBundleReleaseVersionNumber`가 발생합니다.
+
+Firebase Remote Config의 fetch 실패는 현재 활성값 또는 기본값으로 fallback하며, Remote Config 값 누락, URL 파싱 실패, 날짜 파싱 실패는 오류가 아니라 해당 기능 비활성으로 처리됩니다. 아래 enum의 Remote Config 관련 case와 `unknown`은 public API 호환성을 위해 유지되지만, 현재 Remote Config 파서 흐름에서는 throw되지 않으므로 deprecated 처리되어 있습니다.
+
 ```swift
-public enum LaunchingServiceError: Error {
+@available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
+public enum LaunchingServiceError: Error, Equatable, Sendable {
+  @available(*, deprecated, message: "Remote Config URL parsing failures are treated as inactive feature states.")
   case invalidLinkURLValue
+
+  @available(*, deprecated, message: "Missing Remote Config link URL keys are treated as inactive feature states.")
   case notFoundLinkURLKey
+
+  @available(*, deprecated, message: "Missing force update version keys are treated as inactive feature states.")
   case notFoundForceUpdateAppVersionKey
+
+  @available(*, deprecated, message: "Missing optional update version keys are treated as inactive feature states.")
   case notFoundOptionalUpdateAppVersionKey
+
   case invalidMainBundleReleaseVersionNumber
+
+  @available(*, deprecated, message: "The current LaunchingService implementation does not throw unknown errors.")
   case unknown
 }
 ```
@@ -100,7 +115,7 @@ public enum LaunchingServiceError: Error {
 
 상태 판정 우선순위는 Force update, Blacklist force update, Optional update, Notice, `AppUpdateStatus.valid` 순서입니다. 특정 기능의 활성 조건이 만족되지 않으면 다음 조건으로 넘어가며, 모든 기능이 비활성 상태일 때 `valid`가 반환됩니다.
 
-Force update와 Optional update의 버전 비교는 단순 문자열 비교가 아니라 `String.compare(_:options: .numeric)` 기반입니다. 버전 component 수가 다르면 부족한 쪽에 `0`을 채운 뒤 비교하므로 `1.10.0`은 `1.2.0`보다 높은 버전으로 판단됩니다.
+Force update와 Optional update의 버전 비교는 단순 문자열 비교가 아니라 `String.compare(_:options: .numeric)` 기반입니다. 버전 component 수가 다르면 부족한 쪽에 `0`을 채운 뒤 비교합니다. 예를 들어 `1.10`과 `1.2.0`을 비교할 때 `1.10`은 `1.10.0`처럼 보정되고, 숫자 비교 기준으로 `1.10.0`은 `1.2.0`보다 높은 버전으로 판단됩니다.
 
 타이틀과 메시지는 파서 기준으로는 생략할 수 있지만, 사용자에게 보여지는 얼럿 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
@@ -117,6 +132,24 @@ Force update와 Optional update의 버전 비교는 단순 문자열 비교가 �
 `optionalUpdateAlertDoneLinkURLKey`는 선택 업데이트에 필요합니다. 이 URL 값이 없거나 유효하지 않으면 `optionalUpdateAppVersionKey` 값이 있어도 선택 업데이트 체크가 비활성화됩니다.
 
 `LaunchingService`는 `noticeAlertDoneURLKey`가 없거나 파싱되지 않은 경우 UI 버튼 표시 여부를 결정하지 않고 `NoticeAlert.doneURL`에 `nil`을 전달합니다. 버튼 숨김, 비활성화, 링크 없는 확인 동작은 presentation layer에서 결정합니다.
+
+### Remote Config Edge Cases
+| Case | Result |
+| --- | --- |
+| `fetchAndActivate()` 실패 | fetch 실패만으로는 종료하지 않고 현재 활성값 또는 기본값으로 상태 파싱을 계속합니다. 앱 버전 조회 실패는 여전히 throw될 수 있습니다. |
+| `forceUpdateAppVersionKey`가 없거나 공백 | Force update 버전 비교를 건너뛰고 Blacklist force update를 평가합니다. |
+| `forceUpdateAlertDoneLinkURLKey`가 없거나 URL로 파싱되지 않음 | Force update와 Blacklist force update를 모두 비활성으로 판단하고 Optional update를 평가합니다. |
+| `blackListVersionsKey`가 없거나 공백 | Blacklist force update를 건너뛰고 Optional update를 평가합니다. |
+| `blackListVersionsKey`가 현재 앱 버전을 포함하지 않음 | Blacklist force update를 건너뛰고 Optional update를 평가합니다. |
+| `optionalUpdateAppVersionKey`가 없거나 공백 | Optional update를 비활성으로 판단하고 Notice를 평가합니다. |
+| `optionalUpdateAlertDoneLinkURLKey`가 없거나 URL로 파싱되지 않음 | Optional update를 비활성으로 판단하고 Notice를 평가합니다. |
+| `noticeStartDateKey` 또는 `noticeEndDateKey`가 없거나 ISO8601 날짜로 파싱되지 않음 | Notice를 비활성으로 판단합니다. 앞선 상태도 모두 비활성이면 `AppUpdateStatus.valid`를 반환합니다. |
+| Notice 시작일이 종료일보다 같거나 늦음 | Notice를 비활성으로 판단합니다. 앞선 상태도 모두 비활성이면 `AppUpdateStatus.valid`를 반환합니다. |
+| 현재 시간이 Notice 기간 밖에 있음 | Notice를 비활성으로 판단합니다. 앞선 상태도 모두 비활성이면 `AppUpdateStatus.valid`를 반환합니다. |
+| `noticeAlertDoneURLKey`가 없거나 URL로 파싱되지 않음 | Notice 활성 조건에는 영향을 주지 않고 `NoticeAlert.doneURL`만 `nil`로 전달합니다. |
+| 타이틀 또는 메시지가 없거나 공백 | 상태 활성 조건에는 영향을 주지 않습니다. Remote Config에서 읽은 문자열이 그대로 전달될 수 있으므로 실제 서비스에서는 함께 설정하는 것을 권장합니다. |
+| `noticeAlertDismissedTerminateKey`가 없음 | `false`로 처리됩니다. |
+| 모든 기능이 비활성 | `AppUpdateStatus.valid`를 반환합니다. |
 
 ### Default Key Names
 | Group | Key | Value type |

@@ -42,6 +42,20 @@ Notice의 `noticeAlertDoneURLKey`는 공지 노출 조건이 아닙니다. 값�
 
 타이틀과 메시지 값은 파서 기준으로 생략될 수 있지만, 값이 없으면 빈 문자열로 노출될 수 있습니다. 사용자에게 보이는 문구이므로 실제 서비스에서는 함께 설정하는 것을 권장합니다.
 
+경계 케이스별 결과는 아래처럼 해석하면 됩니다.
+
+| Case | Result |
+| --- | --- |
+| Firebase Remote Config fetch 실패 | 현재 활성값 또는 기본값으로 상태 파싱을 계속합니다. |
+| 업데이트 버전 값 누락 또는 업데이트 URL 파싱 실패 | 해당 업데이트 상태를 비활성으로 판단하고 다음 우선순위를 평가합니다. |
+| 블랙리스트 값 누락 또는 현재 앱 버전 불일치 | Blacklist force update를 비활성으로 판단하고 Optional update를 평가합니다. |
+| Notice 시작일/종료일 누락, 파싱 실패, 또는 시작일이 종료일보다 같거나 늦음 | Notice를 비활성으로 판단하고 앞선 상태도 모두 비활성이면 ``AppUpdateStatus/valid``를 반환합니다. |
+| Notice 기간 밖의 현재 시간 | Notice를 비활성으로 판단하고 앞선 상태도 모두 비활성이면 ``AppUpdateStatus/valid``를 반환합니다. |
+| Notice 완료 URL 누락 또는 파싱 실패 | Notice는 노출될 수 있고 ``NoticeAlert/doneURL``만 `nil`로 전달됩니다. |
+| 타이틀/메시지 누락 | 상태 활성 조건에는 영향을 주지 않지만, 사용자에게 빈 문구가 노출될 수 있습니다. |
+| `noticeAlertDismissedTerminateKey` 누락 | `false`로 처리됩니다. |
+| 모든 기능 비활성 | ``AppUpdateStatus/valid``를 반환합니다. |
+
 ## Topics
 
 ### Service
