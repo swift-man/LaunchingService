@@ -40,8 +40,7 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
 
     let releaseVersion = try appVersionProvider.releaseVersion()
     let launching = RemoteConfigParser(valueProvider: remoteConfigClient).parse()
-    return compare(releaseVersion: releaseVersion,
-                   launching: launching,
-                   dateProvider: dateProvider)
+    return LaunchingStatusComparator(dateProvider: dateProvider).compare(releaseVersion: releaseVersion,
+                                                                         launching: launching)
   }
 }

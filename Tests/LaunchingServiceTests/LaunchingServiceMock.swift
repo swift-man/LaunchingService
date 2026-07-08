@@ -23,9 +23,8 @@ final class LaunchingServiceMock: LaunchingInteractable, Sendable {
   }
   
   func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
-    return compare(releaseVersion: releaseVersion,
-                   launching: launching,
-                   dateProvider: dateProvider)
+    return LaunchingStatusComparator(dateProvider: dateProvider).compare(releaseVersion: releaseVersion,
+                                                                         launching: launching)
   }
 }
 

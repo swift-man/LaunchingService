@@ -46,7 +46,7 @@ func expectAppUpdateStatus(releaseVersion: String,
                            optionalUpdate: String,
                            blackListVersions: [String],
                            notice: NoticeInfo?,
-                           dateProvider: any DateProviding = SystemDateProvider(),
+                           dateProvider: any DateProviding = DateProviderMock(now: Date(timeIntervalSince1970: 1_704_067_200)),
                            isEqualStatus: AppUpdateStatus) async throws {
   let service = LaunchingServiceMock(releaseVersion: releaseVersion,
                                      launching: Launching(forceUpdate: AppUpdateInfo(version: forceVersion,
