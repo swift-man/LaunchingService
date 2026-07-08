@@ -210,6 +210,39 @@ struct RemoteConfigParserTests {
     #expect(status == .valid)
   }
 
+  @Test func fetchAppUpdateStatusReturnsNoticeForActiveNotice() async throws {
+    let iso8601Style = Date.ISO8601FormatStyle()
+    let doneURL = URL(string: "https://example.com/notice")!
+    let remoteConfigClient = RemoteConfigClientMock(
+      strings: [
+        "noticeAlertTitleKey": "Active notice",
+        "noticeAlertMessageKey": "Scheduled maintenance",
+        "noticeStartDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(-5000)),
+        "noticeEndDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(5000)),
+        "noticeAlertDoneURLKey": doneURL.absoluteString
+      ],
+      bools: [
+        "noticeAlertDismissedTerminateKey": true
+      ]
+    )
+    let service = LaunchingService(
+      remoteConfigClient: remoteConfigClient,
+      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0"),
+      dateProvider: DateProviderMock(now: Self.referenceDate)
+    )
+
+    let status = try await service.fetchAppUpdateStatus()
+
+    #expect(
+      status == .notice(
+        NoticeAlert(title: "Active notice",
+                    message: "Scheduled maintenance",
+                    isAppTerminated: true,
+                    doneURL: doneURL)
+      )
+    )
+  }
+
   @Test func fetchAppUpdateStatusReturnsValidForFutureNotice() async throws {
     let iso8601Style = Date.ISO8601FormatStyle()
     let remoteConfigClient = RemoteConfigClientMock(
