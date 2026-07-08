@@ -20,8 +20,8 @@ final class RemoteConfigNoticeParser: Sendable {
   func parseNotice() -> NoticeInfo? {
     guard
       let noticeStartDate,
-        let noticeEndDate,
-        noticeStartDate < noticeEndDate
+      let noticeEndDate,
+      noticeStartDate < noticeEndDate
     else { return nil }
     
     return NoticeInfo(title: noticeAlertTitle,
