@@ -31,7 +31,8 @@ let package = Package(
     .testTarget(
       name: "LaunchingServiceTests",
       dependencies: [
-        "LaunchingService"
+        "LaunchingService",
+        .product(name: "DependenciesTestSupport", package: "swift-dependencies"),
       ]),
   ]
 )
