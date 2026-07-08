@@ -14,12 +14,9 @@ struct NoticeChecker: Sendable {
 
   func compare(launching: Launching) -> AppUpdateStatus {
     if let notice = launching.notice, notice.dateRange.contains(now) {
-      return .notice(NoticeAlert(title: notice.title,
-                                 message: notice.message,
-                                 isAppTerminated: notice.isAppTerminated,
-                                 doneURL: notice.doneURL))
+      return .notice(NoticeAlert(notice: notice))
     }
-    
+
     return .valid
   }
 }
