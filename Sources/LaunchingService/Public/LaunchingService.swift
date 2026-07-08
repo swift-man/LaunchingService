@@ -10,17 +10,21 @@
 public final class LaunchingService: LaunchingInteractable, Sendable {
   private let remoteConfigClient: any RemoteConfigClient
   private let appVersionProvider: any AppReleaseVersionProviding
+  private let dateProvider: any DateProviding
 
   /// Creates an instance with the given alignment.
   public init() {
     self.remoteConfigClient = FirebaseRemoteConfigClient()
     self.appVersionProvider = MainBundleReleaseVersionProvider()
+    self.dateProvider = SystemDateProvider()
   }
 
   init(remoteConfigClient: any RemoteConfigClient,
-       appVersionProvider: any AppReleaseVersionProviding) {
+       appVersionProvider: any AppReleaseVersionProviding,
+       dateProvider: any DateProviding) {
     self.remoteConfigClient = remoteConfigClient
     self.appVersionProvider = appVersionProvider
+    self.dateProvider = dateProvider
   }
 
   /// Firebase - RemoteConfig 의 값을 가져오고 계산 된 앱의 상태를 반환 합니다.
@@ -36,6 +40,7 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
 
     let releaseVersion = try appVersionProvider.releaseVersion()
     let launching = RemoteConfigParser(valueProvider: remoteConfigClient).parse()
-    return compare(releaseVersion: releaseVersion, launching: launching)
+    return LaunchingStatusComparator(dateProvider: dateProvider).compare(releaseVersion: releaseVersion,
+                                                                         launching: launching)
   }
 }

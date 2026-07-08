@@ -7,11 +7,13 @@
 
 import Foundation
 import Testing
-import LaunchingService
+@testable import LaunchingService
 
 @Suite("Notice")
 @MainActor
 struct NoticeTests {
+  private static let referenceDate = Date(timeIntervalSince1970: 1_704_067_200)
+
   @Test func notice_1() async throws {
     let title = "title"
     let message = "message"
@@ -25,8 +27,9 @@ struct NoticeTests {
                                     notice: NoticeInfo(title: title,
                                                        message: message,
                                                        isAppTerminated: isAppTerminated,
-                                                       dateRange: Date().addingTimeInterval(-5000) ... Date().addingTimeInterval(5000),
+                                                       dateRange: Self.referenceDate.addingTimeInterval(-5000) ... Self.referenceDate.addingTimeInterval(5000),
                                                        doneURL: doneURL),
+                                    dateProvider: DateProviderMock(now: Self.referenceDate),
                                     isEqualStatus: .notice(NoticeAlert(title: title,
                                                                        message: message,
                                                                        isAppTerminated: isAppTerminated,
@@ -41,8 +44,9 @@ struct NoticeTests {
                                     notice: NoticeInfo(title: "title",
                                                        message: "message",
                                                        isAppTerminated: true,
-                                                       dateRange: Date().addingTimeInterval(5000) ... Date().addingTimeInterval(15000),
+                                                       dateRange: Self.referenceDate.addingTimeInterval(5000) ... Self.referenceDate.addingTimeInterval(15000),
                                                        doneURL: URL(string: "https://github.com/swift-man/LaunchingService")!),
+                                    dateProvider: DateProviderMock(now: Self.referenceDate),
                                     isEqualStatus: .valid)
   }
   
@@ -54,8 +58,9 @@ struct NoticeTests {
                                     notice: NoticeInfo(title: "title",
                                                        message: "message",
                                                        isAppTerminated: true,
-                                                       dateRange: Date().addingTimeInterval(-15000) ... Date().addingTimeInterval(-10000),
+                                                       dateRange: Self.referenceDate.addingTimeInterval(-15000) ... Self.referenceDate.addingTimeInterval(-10000),
                                                        doneURL: URL(string: "https://github.com/swift-man/LaunchingService")!),
+                                    dateProvider: DateProviderMock(now: Self.referenceDate),
                                     isEqualStatus: .valid)
   }
 }
