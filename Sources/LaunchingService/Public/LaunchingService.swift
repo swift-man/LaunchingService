@@ -21,7 +21,7 @@ public final class LaunchingService: LaunchingInteractable, Sendable {
 
   init(remoteConfigClient: any RemoteConfigClient,
        appVersionProvider: any AppReleaseVersionProviding,
-       dateProvider: any DateProviding = SystemDateProvider()) {
+       dateProvider: any DateProviding) {
     self.remoteConfigClient = remoteConfigClient
     self.appVersionProvider = appVersionProvider
     self.dateProvider = dateProvider

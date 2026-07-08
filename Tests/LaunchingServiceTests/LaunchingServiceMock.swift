@@ -16,7 +16,7 @@ final class LaunchingServiceMock: LaunchingInteractable, Sendable {
   
   init(releaseVersion: String,
        launching: Launching,
-       dateProvider: any DateProviding = SystemDateProvider()) {
+       dateProvider: any DateProviding) {
     self.releaseVersion = releaseVersion
     self.launching = launching
     self.dateProvider = dateProvider

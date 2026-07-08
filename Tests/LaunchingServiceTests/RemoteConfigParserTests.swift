@@ -178,7 +178,8 @@ struct RemoteConfigParserTests {
     )
     let service = LaunchingService(
       remoteConfigClient: remoteConfigClient,
-      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0")
+      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0"),
+      dateProvider: DateProviderMock(now: Self.referenceDate)
     )
 
     let status = try await service.fetchAppUpdateStatus()
@@ -200,7 +201,8 @@ struct RemoteConfigParserTests {
     )
     let service = LaunchingService(
       remoteConfigClient: remoteConfigClient,
-      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0")
+      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0"),
+      dateProvider: DateProviderMock(now: Self.referenceDate)
     )
 
     let status = try await service.fetchAppUpdateStatus()
