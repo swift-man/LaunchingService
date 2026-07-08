@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import Dependencies
+import DependenciesTestSupport
 import Testing
 @testable import LaunchingService
 
-@Suite("Notice")
+@Suite("Notice", .dependency(\.date.now, Date(timeIntervalSince1970: 1_704_067_200)))
 @MainActor
 struct NoticeTests {
   private static let referenceDate = Date(timeIntervalSince1970: 1_704_067_200)
@@ -29,7 +31,6 @@ struct NoticeTests {
                                                        isAppTerminated: isAppTerminated,
                                                        dateRange: Self.referenceDate.addingTimeInterval(-5000) ... Self.referenceDate.addingTimeInterval(5000),
                                                        doneURL: doneURL),
-                                    dateProvider: DateProviderMock(now: Self.referenceDate),
                                     isEqualStatus: .notice(NoticeAlert(title: title,
                                                                        message: message,
                                                                        isAppTerminated: isAppTerminated,
@@ -46,7 +47,6 @@ struct NoticeTests {
                                                        isAppTerminated: true,
                                                        dateRange: Self.referenceDate.addingTimeInterval(5000) ... Self.referenceDate.addingTimeInterval(15000),
                                                        doneURL: URL(string: "https://github.com/swift-man/LaunchingService")!),
-                                    dateProvider: DateProviderMock(now: Self.referenceDate),
                                     isEqualStatus: .valid)
   }
   
@@ -60,7 +60,6 @@ struct NoticeTests {
                                                        isAppTerminated: true,
                                                        dateRange: Self.referenceDate.addingTimeInterval(-15000) ... Self.referenceDate.addingTimeInterval(-10000),
                                                        doneURL: URL(string: "https://github.com/swift-man/LaunchingService")!),
-                                    dateProvider: DateProviderMock(now: Self.referenceDate),
                                     isEqualStatus: .valid)
   }
 }

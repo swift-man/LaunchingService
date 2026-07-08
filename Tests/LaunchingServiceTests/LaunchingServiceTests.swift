@@ -46,7 +46,6 @@ func expectAppUpdateStatus(releaseVersion: String,
                            optionalUpdate: String,
                            blackListVersions: [String],
                            notice: NoticeInfo?,
-                           dateProvider: any DateProviding = DateProviderMock(now: Date(timeIntervalSince1970: 1_704_067_200)),
                            isEqualStatus: AppUpdateStatus) async throws {
   let service = LaunchingServiceMock(releaseVersion: releaseVersion,
                                      launching: Launching(forceUpdate: AppUpdateInfo(version: forceVersion,
@@ -58,8 +57,7 @@ func expectAppUpdateStatus(releaseVersion: String,
                                                                                         alertMessage: "",
                                                                                         alertDoneLinkURL: URL(string: "https://github.com/swift-man/LaunchingService")!),
                                                           blackListVersions: blackListVersions,
-                                                          notice: notice),
-                                     dateProvider: dateProvider)
+                                                          notice: notice))
 
   let appStatus = try await service.fetchAppUpdateStatus()
   #expect(appStatus == isEqualStatus)

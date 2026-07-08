@@ -4,10 +4,13 @@
 
 ## [Unreleased]
 
+## [0.9.4] - 2026-07-08
+
 ### 변경
 
 - Notice 활성 기간의 현재 시간 판정을 `NoticeChecker`로 단일화해 `RemoteConfigNoticeParser`가 Remote Config 값 파싱과 모델 생성만 담당하도록 정리했습니다.
-- `NoticeChecker`에 날짜 제공자 주입 경로를 추가해 Notice 활성 기간 테스트가 시스템 현재 시각에 직접 의존하지 않도록 개선했습니다.
+- `NoticeChecker`의 현재 시각 판정을 `Dependencies`의 date 의존성으로 통합해 Notice 활성 기간 테스트가 시스템 현재 시각에 직접 의존하지 않도록 개선했습니다.
+- `NoticeInfo`에서 `NoticeAlert`로 변환하는 초기화를 분리해 `NoticeChecker`가 Notice 활성 기간 판정에 집중하도록 정리했습니다.
 
 ## [0.9.3] - 2026-07-08
 
@@ -56,7 +59,8 @@
 
 - DocC 주석 연결과 문서 호스팅 설정을 정리했습니다.
 
-[Unreleased]: https://github.com/swift-man/LaunchingService/compare/0.9.3...HEAD
+[Unreleased]: https://github.com/swift-man/LaunchingService/compare/0.9.4...HEAD
+[0.9.4]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.4
 [0.9.3]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.3
 [0.9.2]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.2
 [0.9.1]: https://github.com/swift-man/LaunchingService/releases/tag/0.9.1

@@ -2,7 +2,7 @@
 
 ![Badge](https://img.shields.io/badge/swift-white.svg?style=flat-square&logo=Swift)
 ![Badge](https://img.shields.io/badge/SwiftUI-001b87.svg?style=flat-square&logo=Swift&logoColor=black)
-![Badge - Version](https://img.shields.io/badge/Version-0.9.2-1177AA?style=flat-square)
+![Badge - Version](https://img.shields.io/badge/Version-0.9.4-1177AA?style=flat-square)
 ![Badge - Swift Package Manager](https://img.shields.io/badge/SPM-compatible-orange?style=flat-square)
 ![Badge - Platform](https://img.shields.io/badge/platform-mac_12|ios_15|tvos_15|watchos_8-yellow?style=flat-square)
 ![Badge - License](https://img.shields.io/badge/license-MIT-black?style=flat-square)  
@@ -300,6 +300,6 @@ Swift package 설정이 끝났다면 `Package.swift`의 `dependencies` 값에 La
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-man/LaunchingService.git", from: "0.9.2")
+    .package(url: "https://github.com/swift-man/LaunchingService.git", from: "0.9.4")
 ]
 ```
