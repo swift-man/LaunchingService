@@ -147,6 +147,23 @@ struct RemoteConfigParserTests {
     #expect(notice?.dateRange.contains(Date()) == false)
   }
 
+  @Test func remoteConfigParserParsesExpiredNoticeWithoutCheckingCurrentDate() {
+    let iso8601Style = Date.ISO8601FormatStyle()
+    let parser = RemoteConfigParser(
+      valueProvider: RemoteConfigClientMock(strings: [
+        "noticeAlertTitleKey": "Expired notice",
+        "noticeAlertMessageKey": "Scheduled maintenance",
+        "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(-15000)),
+        "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(-5000))
+      ])
+    )
+
+    let notice = parser.parse().notice
+
+    #expect(notice?.title == "Expired notice")
+    #expect(notice?.dateRange.contains(Date()) == false)
+  }
+
   @Test func fetchAppUpdateStatusContinuesWithCachedConfigWhenFetchFails() async throws {
     let remoteConfigClient = RemoteConfigClientMock(
       strings: [
