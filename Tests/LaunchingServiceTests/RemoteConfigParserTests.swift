@@ -12,6 +12,8 @@ import Testing
 @Suite("RemoteConfigParser")
 @MainActor
 struct RemoteConfigParserTests {
+  private static let referenceDate = Date(timeIntervalSince1970: 1_704_067_200)
+
   @Test func forceUpdateParserKeepsAlertInfoWhenForceVersionIsMissing() {
     let parser = RemoteConfigForceUpdateParser(
       keyStore: RemoteConfigRegisterdKeys(),
@@ -90,8 +92,8 @@ struct RemoteConfigParserTests {
         strings: [
           "noticeAlertTitleKey": "Notice",
           "noticeAlertMessageKey": "Scheduled maintenance",
-          "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(-5000)),
-          "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(5000)),
+          "noticeStartDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(-5000)),
+          "noticeEndDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(5000)),
           "noticeAlertDoneURLKey": doneURL.absoluteString
         ],
         bools: [
@@ -106,7 +108,7 @@ struct RemoteConfigParserTests {
     #expect(notice?.message == "Scheduled maintenance")
     #expect(notice?.isAppTerminated == true)
     #expect(notice?.doneURL == doneURL)
-    #expect(notice?.dateRange.contains(Date()) == true)
+    #expect(notice?.dateRange.contains(Self.referenceDate) == true)
   }
 
   @Test func remoteConfigParserContinuesToParseNoticeDatesWithCompactTimeZone() {
@@ -119,15 +121,15 @@ struct RemoteConfigParserTests {
       valueProvider: RemoteConfigClientMock(strings: [
         "noticeAlertTitleKey": "Notice",
         "noticeAlertMessageKey": "Scheduled maintenance",
-        "noticeStartDateKey": dateFormatter.string(from: Date().addingTimeInterval(-5000)),
-        "noticeEndDateKey": dateFormatter.string(from: Date().addingTimeInterval(5000))
+        "noticeStartDateKey": dateFormatter.string(from: Self.referenceDate.addingTimeInterval(-5000)),
+        "noticeEndDateKey": dateFormatter.string(from: Self.referenceDate.addingTimeInterval(5000))
       ])
     )
 
     let notice = parser.parse().notice
 
     #expect(notice?.title == "Notice")
-    #expect(notice?.dateRange.contains(Date()) == true)
+    #expect(notice?.dateRange.contains(Self.referenceDate) == true)
   }
 
   @Test func remoteConfigParserParsesNoticeWithoutCheckingCurrentDate() {
@@ -136,15 +138,15 @@ struct RemoteConfigParserTests {
       valueProvider: RemoteConfigClientMock(strings: [
         "noticeAlertTitleKey": "Future notice",
         "noticeAlertMessageKey": "Scheduled maintenance",
-        "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(5000)),
-        "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(15000))
+        "noticeStartDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(5000)),
+        "noticeEndDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(15000))
       ])
     )
 
     let notice = parser.parse().notice
 
     #expect(notice?.title == "Future notice")
-    #expect(notice?.dateRange.contains(Date()) == false)
+    #expect(notice?.dateRange.contains(Self.referenceDate) == false)
   }
 
   @Test func remoteConfigParserParsesExpiredNoticeWithoutCheckingCurrentDate() {
@@ -153,15 +155,15 @@ struct RemoteConfigParserTests {
       valueProvider: RemoteConfigClientMock(strings: [
         "noticeAlertTitleKey": "Expired notice",
         "noticeAlertMessageKey": "Scheduled maintenance",
-        "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(-15000)),
-        "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(-5000))
+        "noticeStartDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(-15000)),
+        "noticeEndDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(-5000))
       ])
     )
 
     let notice = parser.parse().notice
 
     #expect(notice?.title == "Expired notice")
-    #expect(notice?.dateRange.contains(Date()) == false)
+    #expect(notice?.dateRange.contains(Self.referenceDate) == false)
   }
 
   @Test func fetchAppUpdateStatusContinuesWithCachedConfigWhenFetchFails() async throws {
@@ -212,13 +214,14 @@ struct RemoteConfigParserTests {
       strings: [
         "noticeAlertTitleKey": "Future notice",
         "noticeAlertMessageKey": "Scheduled maintenance",
-        "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(5000)),
-        "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(15000))
+        "noticeStartDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(5000)),
+        "noticeEndDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(15000))
       ]
     )
     let service = LaunchingService(
       remoteConfigClient: remoteConfigClient,
-      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0")
+      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0"),
+      dateProvider: DateProviderMock(now: Self.referenceDate)
     )
 
     let status = try await service.fetchAppUpdateStatus()
@@ -232,13 +235,14 @@ struct RemoteConfigParserTests {
       strings: [
         "noticeAlertTitleKey": "Expired notice",
         "noticeAlertMessageKey": "Scheduled maintenance",
-        "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(-15000)),
-        "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(-5000))
+        "noticeStartDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(-15000)),
+        "noticeEndDateKey": iso8601Style.format(Self.referenceDate.addingTimeInterval(-5000))
       ]
     )
     let service = LaunchingService(
       remoteConfigClient: remoteConfigClient,
-      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0")
+      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0"),
+      dateProvider: DateProviderMock(now: Self.referenceDate)
     )
 
     let status = try await service.fetchAppUpdateStatus()

@@ -6,21 +6,26 @@
 //
 
 import Foundation
-import LaunchingService
+@testable import LaunchingService
 
 @MainActor
 final class LaunchingServiceMock: LaunchingInteractable, Sendable {
   let releaseVersion: String
   let launching: Launching
+  let dateProvider: any DateProviding
   
   init(releaseVersion: String,
-       launching: Launching) {
+       launching: Launching,
+       dateProvider: any DateProviding = SystemDateProvider()) {
     self.releaseVersion = releaseVersion
     self.launching = launching
+    self.dateProvider = dateProvider
   }
   
   func fetchAppUpdateStatus() async throws -> AppUpdateStatus {
-    return compare(releaseVersion: releaseVersion, launching: launching)
+    return compare(releaseVersion: releaseVersion,
+                   launching: launching,
+                   dateProvider: dateProvider)
   }
 }
 

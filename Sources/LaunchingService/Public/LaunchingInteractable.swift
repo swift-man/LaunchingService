@@ -19,11 +19,20 @@ public protocol LaunchingInteractable: AnyObject, Sendable {
 extension LaunchingInteractable {
   @available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
   public func compare(releaseVersion: String, launching: Launching) -> AppUpdateStatus {
+    compare(releaseVersion: releaseVersion,
+            launching: launching,
+            dateProvider: SystemDateProvider())
+  }
+
+  @available(iOS 15.0, macOS 12, tvOS 15, watchOS 8.0, *)
+  func compare(releaseVersion: String,
+               launching: Launching,
+               dateProvider: any DateProviding) -> AppUpdateStatus {
     var appStatus = AppUpdateStatusChecker().compare(releaseVersion: releaseVersion,
                                                      launching: launching)
     
     if appStatus == .valid {
-      appStatus = NoticeChecker().compare(launching: launching)
+      appStatus = NoticeChecker(dateProvider: dateProvider).compare(launching: launching)
     }
     
     return appStatus
