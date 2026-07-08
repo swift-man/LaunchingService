@@ -225,6 +225,26 @@ struct RemoteConfigParserTests {
 
     #expect(status == .valid)
   }
+
+  @Test func fetchAppUpdateStatusReturnsValidForExpiredNotice() async throws {
+    let iso8601Style = Date.ISO8601FormatStyle()
+    let remoteConfigClient = RemoteConfigClientMock(
+      strings: [
+        "noticeAlertTitleKey": "Expired notice",
+        "noticeAlertMessageKey": "Scheduled maintenance",
+        "noticeStartDateKey": iso8601Style.format(Date().addingTimeInterval(-15000)),
+        "noticeEndDateKey": iso8601Style.format(Date().addingTimeInterval(-5000))
+      ]
+    )
+    let service = LaunchingService(
+      remoteConfigClient: remoteConfigClient,
+      appVersionProvider: AppReleaseVersionProviderMock(version: "1.0.0")
+    )
+
+    let status = try await service.fetchAppUpdateStatus()
+
+    #expect(status == .valid)
+  }
 }
 
 private enum RemoteConfigClientMockError: Error {
