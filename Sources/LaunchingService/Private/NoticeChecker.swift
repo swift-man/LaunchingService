@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class NoticeChecker: Sendable {
+struct NoticeChecker: Sendable {
   private let dateProvider: any DateProviding
 
   init(dateProvider: any DateProviding = SystemDateProvider()) {
