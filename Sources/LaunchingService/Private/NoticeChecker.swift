@@ -9,10 +9,10 @@ import Dependencies
 import Foundation
 
 struct NoticeChecker: Sendable {
-  func compare(launching: Launching) -> AppUpdateStatus {
-    @Dependency(\.date.now)
-    var now
+  @Dependency(\.date.now)
+  private var now
 
+  func compare(launching: Launching) -> AppUpdateStatus {
     if let notice = launching.notice, notice.dateRange.contains(now) {
       return .notice(NoticeAlert(title: notice.title,
                                  message: notice.message,
