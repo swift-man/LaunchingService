@@ -24,9 +24,6 @@ final class RemoteConfigNoticeParser: Sendable {
         noticeStartDate < noticeEndDate
     else { return nil }
     
-    let range = noticeStartDate...noticeEndDate
-    guard range.contains(Date()) else { return nil }
-    
     return NoticeInfo(title: noticeAlertTitle,
                       message: noticeAlertMessage,
                       isAppTerminated: noticeAlertDismissedTerminate,

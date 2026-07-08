@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### 변경
+
+- Notice 활성 기간의 현재 시간 판정을 `NoticeChecker`로 단일화해 `RemoteConfigNoticeParser`가 Remote Config 값 파싱과 모델 생성만 담당하도록 정리했습니다.
+
 ## [0.9.3] - 2026-07-08
 
 ### 변경
